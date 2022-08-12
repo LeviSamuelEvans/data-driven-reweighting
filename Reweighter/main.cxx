@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <iomanip>
 #include <cstdio>
 #include <TChain.h>
 #include <ROOT/RDFHelpers.hxx>
@@ -31,7 +32,8 @@ public:
         progress = progress < 0.f ? 0.f : progress;
         for (int i = 0; i < BAR_LENGTH * progress - 0.5 && i < BAR_LENGTH; ++i)
             bar[i] = '#';
-        std::fprintf(stderr, "\r%s [%-" BOOST_PP_STRINGIZE(BAR_LENGTH) "s] %.0f%%", label.c_str(), bar, 100.f * progress);
+        std::fprintf(stdout, "\r%s [%-" BOOST_PP_STRINGIZE(BAR_LENGTH) "s] %.0f%%", label.c_str(), bar, 100.f * progress);
+        std::fflush(stdout);
     };
 
 private:
@@ -47,7 +49,7 @@ int main(int argc, char *argv[])
     std::vector<std::string> rew_samples;   // Samples to reweight (filenames)
     std::vector<std::string> const_samples; // Samples to keep constant (filenames)
     std::vector<std::string> data_samples;  // Data samples (filenames)
-    std::string outputFile;                 // Output filename
+    std::string output_file;                // Output filename
     std::string selection;                  // Selection
     std::string weight_expr;                // Weight expression
     std::string reweight_var;               // Variable to use for reweighting
@@ -67,7 +69,8 @@ int main(int argc, char *argv[])
         ("reweightSample", po::value(&rew_samples)->multitoken(), "List of filenames to reweight.")         //
         ("constSample", po::value(&const_samples)->multitoken(), "List of filenames not to be reweighted.") //
         ("dataSample", po::value(&data_samples)->multitoken(), "List of filenames to use as data.")         //
-        ("weight", po::value(&weight_expr), "MC weight expression");                                        //
+        ("weight", po::value(&weight_expr), "MC weight expression")                                         //
+        ("outputFile", po::value(&output_file)->default_value("out.root"), "Output filename");              //
 
     po::options_description cmdline_options;
     cmdline_options.add(commandline).add(config);
@@ -88,16 +91,16 @@ int main(int argc, char *argv[])
     po::store(po::parse_config_file(ifs, config_file_options), vm);
     po::notify(vm);
 
-    const std::map<int, std::string> nJetsCuts = {
-        {5, "nJets == 5"},
-        {6, "nJets == 6"},
-        {7, "nJets == 7"},
-        {8, "nJets == 8"},
-        {9, "nJets >= 9"},
+    const std::vector<std::string> Cuts = {
+        "nJets == 5",
+        "nJets == 6",
+        "nJets == 7",
+        "nJets == 8",
+        "nJets >= 9",
     };
 
     /* Compute bins for reweighting */
-    std::map<int, std::vector<float>> rew_bins;
+    std::map<std::string, std::vector<float>> rew_bins;
     {
         TChain chain("nominal_Loose");
         for (auto &s : rew_samples)
@@ -107,19 +110,19 @@ int main(int argc, char *argv[])
         }
         int n_entries = chain.GetEntries();
 
-        for (auto cut : nJetsCuts)
+        for (const std::string &cut : Cuts)
         {
             ROOT::RDF::RNode df = ROOT::RDataFrame(chain);
 
             /* Display progress */
             ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
-            ProgressBar pb(n_entries, "Computing bins (" + cut.second + ")");
+            ProgressBar pb(n_entries, "Computing bins (" + cut + ")");
             count_result.OnPartialResult(n_entries / 100, std::ref(pb));
             /* */
 
             if (!selection.empty())
                 df = df.Filter(selection);
-            df = df.Filter(cut.second);
+            df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + ")");
 
@@ -154,18 +157,19 @@ int main(int argc, char *argv[])
             if (bins.back() < rew_var[idx.back()])
                 bins.push_back(rew_var[idx.back()]);
 
-            rew_bins[cut.first] = std::move(bins);
+            rew_bins[cut] = std::move(bins);
         }
     }
     /* */
 
     /* Compute reweighting */
-    std::map<int, std::vector<float>> rew_factors;
-    for (auto cut : nJetsCuts)
+    std::vector<std::string> rew_selection;
+    std::vector<std::string> rew_factor;
+    for (auto &cut : Cuts)
     {
-        std::cerr << std::endl;
-        std::cerr << "Processing " << cut.second << ":" << std::endl;
-        auto &bins = rew_bins[cut.first];
+        std::cout << std::endl;
+        std::cout << "Processing " << cut << ":" << std::endl;
+        auto &bins = rew_bins[cut];
         int n_bins = bins.size() - 1;
 
         // Histograms for computing reweighting factors
@@ -196,7 +200,7 @@ int main(int argc, char *argv[])
 
             if (!selection.empty())
                 df = df.Filter(selection);
-            df = df.Filter(cut.second);
+            df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + ")");
             df = df.Define("wx", "w * x");
@@ -235,7 +239,7 @@ int main(int argc, char *argv[])
 
             if (!selection.empty())
                 df = df.Filter(selection);
-            df = df.Filter(cut.second);
+            df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + ")");
             const_hist = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
@@ -262,7 +266,7 @@ int main(int argc, char *argv[])
 
             if (!selection.empty())
                 df = df.Filter(selection);
-            df = df.Filter(cut.second);
+            df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             data_hist = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x").GetValue();
         }
@@ -282,11 +286,12 @@ int main(int argc, char *argv[])
             return EXIT_FAILURE;
         }
 
+        std::vector<float> factors;
         for (int i = 1; i <= n_bins; ++i)
-            rew_factors[cut.first].push_back(data_hist.GetBinContent(i));
+            factors.push_back(data_hist.GetBinContent(i));
 
         /* Interpolate reweighting */
-        std::cerr << "  Interpolating ..." << std::endl;
+        std::cout << "  Interpolating ..." << std::endl;
 
         // The polynomial coefficients are the solution of Ax = y
         Eigen::MatrixXd A(3 * n_bins, 3 * n_bins);
@@ -312,7 +317,7 @@ int main(int argc, char *argv[])
                     A(eqn_idx, i + 2 * n_bins) = 0.f;
                 }
             }
-            y(eqn_idx) = rew_factors[cut.first][cond_idx];
+            y(eqn_idx) = factors[cond_idx];
         }
 
         // Continuity condition
@@ -409,56 +414,38 @@ int main(int argc, char *argv[])
         // Solve system of linear equations
         Eigen::VectorXd x = A.colPivHouseholderQr().solve(y);
 
-        // std::cout << std::endl;
-        // std::cout << "Matrix:" << std::endl;
-        // for (int i = 0; i < 57; ++i)
-        // {
-        //     for (int j = 0; j < 57; ++j)
-        //         std::cout << A(i, j) << ", ";
-        //     std::cout << std::endl;
-        // }
-        // // std::cout << A << std::endl;
-        // std::cout << std::endl;
-        // std::cout << "y:" << std::endl;
-        // std::cout << y << std::endl;
-        // std::cout << std::endl;
-        // std::cout << "x:" << std::endl;
-        // std::cout << x << std::endl;
-        // std::cout << std::endl;
-
-        // std::cout << std::endl;
-        // std::cout << "Test:" << std::endl;
-        // std::cout << A * x - y << std::endl;
-        // std::cout << std::endl;
-
         // Split coefficients
-        // std::vector<float> a(x.data() + 0 * n_bins, x.data() + 1 * n_bins);
-        // std::vector<float> b(x.data() + 1 * n_bins, x.data() + 2 * n_bins);
-        // std::vector<float> c(x.data() + 2 * n_bins, x.data() + 3 * n_bins);
-        // std::cout << std::endl;
+        std::vector<float> a(x.data() + 0 * n_bins, x.data() + 1 * n_bins);
+        std::vector<float> b(x.data() + 1 * n_bins, x.data() + 2 * n_bins);
+        std::vector<float> c(x.data() + 2 * n_bins, x.data() + 3 * n_bins);
 
-        // for (int i = 0; i < n_bins; ++i)
-        //     std::cout << a[i] << "*x2 + " << b[i] << "*x + " << c[i] << std::endl;
-
-        // for (size_t i = 0; i < bins.size(); ++i)
-        //     std::cout << bins[i] << std::endl;
-    }
-
-    std::vector<std::string> r_selection;
-    std::vector<std::string> r_weight_factor;
-    for (auto cut : nJetsCuts)
-    {
-        auto &bins = rew_bins[cut.first];
-        int n_bins = bins.size() - 1;
+        std::string var_str = "(" + reweight_var + ")";
         for (int i = 0; i < n_bins; ++i)
         {
-            std::string s = cut.second + " && (" +
-                            reweight_var + ") >= " + std::to_string(bins[i]) + " && (" +
-                            reweight_var + ") < " + std::to_string(bins[i + 1]);
-            r_selection.push_back(s);
-            std::cout << s << std::endl;
+            std::string sel = "(" + cut + ") && " +
+                              var_str + " >= " + std::to_string(bins[i]) + " && " +
+                              var_str + " < " + std::to_string(bins[i + 1]);
+            rew_selection.push_back(sel);
+
+            std::ostringstream sout;
+            sout << std::setprecision(8);
+            sout << a[i] << " * " + var_str + " * " + var_str + " + "
+                 << b[i] << " * " + var_str + " + " << c[i];
+            rew_factor.push_back(sout.str());
         }
     }
 
+    TFile *f = TFile::Open(output_file.c_str(), "RECREATE");
+    if (!f)
+    {
+        std::cerr << "ERROR: Failed to create output file" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    f->WriteObject(&rew_selection, "selection");
+    f->WriteObject(&rew_factor, "factors");
+
+    f->Write();
+    f->Close();
     return EXIT_SUCCESS;
 }

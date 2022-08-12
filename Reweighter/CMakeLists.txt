@@ -4,7 +4,7 @@ project(HTReweighter VERSION 1.0.0)
 find_package(AnalysisBase REQUIRED)
 atlas_project(HTReweighter 1.0.0)
 
-find_package(ROOT 6.24 REQUIRED COMPONENTS ROOTDataFrame Tree TreePlayer Hist)
+find_package(ROOT 6.24 REQUIRED COMPONENTS ROOTDataFrame Tree RIO TreePlayer Hist)
 find_package(Boost COMPONENTS program_options REQUIRED)
 find_package(Eigen REQUIRED)
 
