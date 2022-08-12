@@ -90,10 +90,10 @@ int main(int argc, char *argv[])
 
     const std::map<int, std::string> nJetsCuts = {
         {5, "nJets == 5"},
-        // {6, "nJets == 6"},
-        // {7, "nJets == 7"},
-        // {8, "nJets == 8"},
-        // {9, "nJets >= 9"},
+        {6, "nJets == 6"},
+        {7, "nJets == 7"},
+        {8, "nJets == 8"},
+        {9, "nJets >= 9"},
     };
 
     /* Compute bins for reweighting */
@@ -405,9 +405,6 @@ int main(int argc, char *argv[])
         }
         y(eqn_idx) = 0.f;
         ++eqn_idx;
-
-        std::cout << "N bins: " << n_bins << std::endl;
-        std::cout << "N equations: " << eqn_idx << std::endl;
 
         // Solve system of linear equations
         Eigen::VectorXd x = A.colPivHouseholderQr().solve(y);
