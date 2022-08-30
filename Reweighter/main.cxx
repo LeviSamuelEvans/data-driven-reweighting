@@ -279,6 +279,10 @@ int main(int argc, char *argv[])
             return EXIT_FAILURE;
         }
 
+        // Normalize histograms
+        data_hist.Scale(1. / data_hist.Integral());
+        rew_hist.Scale(1. / rew_hist.Integral());
+
         // Compute ratio
         if (!data_hist.Divide(&rew_hist))
         {
