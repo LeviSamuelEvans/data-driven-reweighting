@@ -16,3 +16,4 @@ target_link_libraries(reweight PRIVATE ${BOOST_LIBRARIES} ${ROOT_LIBRARIES} ${EI
 
 lcg_generate_env(SH_FILE ${CMAKE_BINARY_DIR}/${ATLAS_PLATFORM}/env_setup.sh)
 install(FILES ${CMAKE_BINARY_DIR}/${ATLAS_PLATFORM}/env_setup.sh DESTINATION .)
+
