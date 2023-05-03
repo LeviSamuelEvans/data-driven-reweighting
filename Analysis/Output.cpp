@@ -1,6 +1,6 @@
 
 /*
-g++ Output.cpp -o myExecutable `root-config --cflags --libs`
+g++ Output.cpp -o output `root-config --cflags --libs`
 
 */
 
