@@ -1,2 +1,8 @@
 build
 .asetup.save
+CMakeFiles/
+osCheck.py
+CMakeCache.txt
+
+# Ignore an entire directory
+output/
