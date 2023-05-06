@@ -103,34 +103,11 @@ int main(int argc, char *argv[])
     std::map<std::string, std::vector<float>> rew_bins;
     {
         TChain chain("nominal_Loose");
-        std::vector<std::string> regions = {"5j3b_ttbb", "5j3b_ttb", "5j3b_ttc", "5j3b_ttB", "5j3b_ttlight"};
-
         for (auto &s : rew_samples)
         {
-        std::string path;
-        bool is_region = false;
-
-        // Check if the sample matches one of the regions
-        for (auto &region : regions)
-        {
-            if (s.find(region) != std::string::npos)
-            {
-                path = base_path + region + "/*.root";
-                is_region = true;
-                break;
-            }
+            std::string path = base_path + "/" + s + ".root";
+            chain.Add(path.c_str());
         }
-
-        // If the sample is not a region, use the original path
-        if (!is_region)
-        {
-            path = base_path + "/" + s + ".root";
-        }
-
-        // Add the files to the TChain
-        chain.Add(path.c_str());
-    }
-
         int n_entries = chain.GetEntries();
 
         for (const std::string &cut : Cuts)
