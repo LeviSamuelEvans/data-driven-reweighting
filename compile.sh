@@ -7,5 +7,4 @@ source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh
 asetup AnalysisBase,22.2.60
 
 mkdir -p build
-cmake  Reweighter -B build
-make -C build
+
