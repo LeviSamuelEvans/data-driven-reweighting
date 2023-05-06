@@ -9,8 +9,10 @@
 #include <TInterpreter.h>
 #include <boost/program_options.hpp>
 #include <Eigen/Dense>
+#include "Reweighter/Regions.h"
 
 namespace po = boost::program_options;
+
 
 #define BAR_LENGTH 40
 
@@ -98,16 +100,20 @@ int main(int argc, char *argv[])
         "nJets == 8",
         "nJets >= 9",
     };
-
+    // region + "/" "/" + r + 
     /* Compute bins for reweighting */
     std::map<std::string, std::vector<float>> rew_bins;
     {
         TChain chain("nominal_Loose");
-        for (auto &s : rew_samples)
-        {
-            std::string path = base_path + "/" + s + ".root";
+        for (auto &r : region) // Loop over the regions defined in the header file
+            {
+            for (auto &s : rew_samples) // Loop over the new samples to be included
+                {
+            std::string path = base_path + "/" + r + "/" + s + ".root";
+            std::cout << "LE" << path << std::endl;
             chain.Add(path.c_str());
-        }
+                }
+            }
         int n_entries = chain.GetEntries();
 
         for (const std::string &cut : Cuts)
@@ -182,11 +188,15 @@ int main(int argc, char *argv[])
 
         /* Get rew. histogram and integrals*/
         {
-            TChain chain("nominal_Loose");
-            for (auto &s : rew_samples)
+        TChain chain("nominal_Loose");
+        for (auto &r : region) // Loop over the regions defined in the header file
             {
-                std::string path = base_path + "/" + s + ".root";
-                chain.Add(path.c_str());
+                for (auto &s : rew_samples) // Loop over the new samples to be included
+                    {
+            std::string path = base_path + "/" + r + "/" + s + ".root";
+            std::cout << "LE" << path << std::endl;
+            chain.Add(path.c_str());
+                }
             }
             int n_entries = chain.GetEntries();
 
@@ -222,11 +232,15 @@ int main(int argc, char *argv[])
         /* Get const. histogram */
         {
             TChain chain("nominal_Loose");
-            for (auto &s : const_samples)
-            {
-                std::string path = base_path + "/" + s + ".root";
-                chain.Add(path.c_str());
-            }
+                for (auto &r : region) // Loop over the regions defined in the header file
+                {
+                    for (auto &s : rew_samples) // Loop over the new samples to be included
+                    {
+                    std::string path = base_path + "/" + r + "/" + s + ".root";
+                    std::cout << "LE" << path << std::endl;
+                    chain.Add(path.c_str());
+                    }
+                }
             int n_entries = chain.GetEntries();
 
             ROOT::RDF::RNode df = ROOT::RDataFrame(chain);
@@ -249,10 +263,14 @@ int main(int argc, char *argv[])
         /* Get data histogram */
         {
             TChain chain("nominal_Loose");
-            for (auto &s : data_samples)
+            for (auto &r : region) // Loop over the regions defined in the header file
             {
-                std::string path = base_path + "/" + s + ".root";
+                for (auto &s : rew_samples) // Loop over the new samples to be included
+                {
+                std::string path = base_path + "/" + r + "/" + s + ".root";
+                std::cout << "LE" << path << std::endl;
                 chain.Add(path.c_str());
+                }
             }
             int n_entries = chain.GetEntries();
 
