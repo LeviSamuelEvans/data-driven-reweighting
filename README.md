@@ -11,6 +11,10 @@ The compilation script will setup the ATLAS enviroment, the 22.2.60 release of A
 ```
 source build/*/setup.sh
 ```
+Recompile the code with :
+```
+source recompile.sh
+```
 The options used in the code are steered by a configuration file, with the following options available for configuration:
 
 | Option Name             | Description |
