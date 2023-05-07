@@ -27,6 +27,11 @@ The options used in the code are steered by a configuration file, with the follo
 |   outputFile                |   The name of the output .root file containing the re-weighting factors, stored as a vector.                  |
 |     reweightSample                               |   The samples you would like to be used in the reweighting                      |
 | constSample | The samples you would like to keep constant in the calculation |
+| ttbb_selection|  Apply a selection to the ttbb sampe for only ttbb HF events|
+| ttc_selection  | Apply a selection to the ttbar sampe for only ttc HF events |
+| ttlight_selection | Apply a selection to the ttbar sampe for only ttlight HF events |
+| ttbar_Reweight| Apply weight string for ttc/ttlight reweighting in ttbb derivation |
+| NormFactor |  Apply Post-fit normalisation scaling to ttc sample |
 
 - Two example configuration files are given under the names config_1l.cfg and config_2l.cfg.
 
