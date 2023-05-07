@@ -54,9 +54,13 @@ int main(int argc, char *argv[])
     std::string output_file;                // Output filename
     std::string selection;                  // Orthogonal Region Selection
     std::string ttbb_selection;             // ttbb HF selection
+    std::string ttc_selection;              // ttc HF selection
+    std::string ttlight_selection;          // ttlight HF selection 
     std::string weight_expr;                // Weight expression
     std::string reweight_var;               // Variable to use for reweighting
+    std::string ttbarReweight;              // include reweighting prev. done for ttbar
     float min_bin_width;                    // Minimum width of histogram bins
+
 
     po::options_description commandline("Command-line options");
     commandline.add_options()                                                    //
@@ -73,8 +77,11 @@ int main(int argc, char *argv[])
         ("constSample", po::value(&const_samples)->multitoken(), "List of filenames not to be reweighted.") //
         ("dataSample", po::value(&data_samples)->multitoken(), "List of filenames to use as data.")         //
         ("weight", po::value(&weight_expr), "MC weight expression")                                         //
-        ("outputFile", po::value(&output_file)->default_value("out.root"), "Output filename")              //
-        ("ttbb_selection", po::value(&ttbb_selection), "ttbb HF selection");                                   //
+        ("outputFile", po::value(&output_file)->default_value("out.root"), "Output filename")               //
+        ("ttbb_selection", po::value(&ttbb_selection), "ttbb HF selection")                                 //
+        ("ttc_selection", po::value(&ttc_selection), "ttc HF selection")                                    //
+        ("ttlight_selection", po::value(&ttlight_selection), "ttlight HF selection")                        //
+        ("ttbarReweight", po::value(&ttbarReweight), "including previous reweighting done for ttc/ttlight");//
 
     po::options_description cmdline_options;
     cmdline_options.add(commandline).add(config);
@@ -103,9 +110,9 @@ int main(int argc, char *argv[])
         "nJets >= 9",
     };
 
-    /*|================================================|
-      | Compute bins for reweighting using rew samples |
-      |================================================|*/
+    /* |================================================|
+       | Compute bins for reweighting using rew samples |
+       |================================================| */
 
     std::map<std::string, std::vector<float>> rew_bins;
     {   std::cout << "\033[1;32m==================================" << std::endl;
@@ -140,6 +147,7 @@ int main(int argc, char *argv[])
                 df = df.Filter(selection);
             if (!ttbb_selection.empty())
                 df = df.Filter(ttbb_selection);
+            // check our selection is working as intended
             std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
