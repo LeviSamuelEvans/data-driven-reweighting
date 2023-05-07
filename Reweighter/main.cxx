@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
     std::string reweight_var;               // Variable to use for reweighting
     std::string ttbarReweight;              // include reweighting prev. done for ttbar
     float min_bin_width;                    // Minimum width of histogram bins
+    float NormFactor;                       // Scaling applied to the ttc Sample 
 
 
     po::options_description commandline("Command-line options");
@@ -81,7 +82,8 @@ int main(int argc, char *argv[])
         ("ttbb_selection", po::value(&ttbb_selection), "ttbb HF selection")                                 //
         ("ttc_selection", po::value(&ttc_selection), "ttc HF selection")                                    //
         ("ttlight_selection", po::value(&ttlight_selection), "ttlight HF selection")                        //
-        ("ttbarReweight", po::value(&ttbarReweight), "including previous reweighting done for ttc/ttlight");//
+        ("ttbarReweight", po::value(&ttbarReweight), "including previous reweighting done for ttc/ttlight") //
+        ("NormFactor"), po::value(&NormFactor), "Scaling the ttc sample yield by the post-fit value"        //
 
     po::options_description cmdline_options;
     cmdline_options.add(commandline).add(config);
@@ -212,7 +214,7 @@ int main(int argc, char *argv[])
         TChain chain("nominal_Loose");
         for (auto &r : region) // Loop over the regions defined in the header file
             {
-                for (auto &s : rew_samples) // Loop over the new samples to be included
+                for (auto &s : rew_samples) // Loop over the rew samples to be included
                     {
                 std::string path = base_path + "/" + r + "/" + s + ".root";
                 chain.Add(path.c_str());
@@ -230,7 +232,10 @@ int main(int argc, char *argv[])
 
             if (!selection.empty())
                 df = df.Filter(selection);
-                // Add ttbb selection here Levi *************************
+            if (!ttbb_selection.empty())
+                df = df.Filter(ttbb_selection);
+            // check our selection is working as intended
+            std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + ")");
@@ -277,6 +282,7 @@ int main(int argc, char *argv[])
 
             if (!selection.empty())
                 df = df.Filter(selection);
+            
                 // find a way to add ttc/ttlight selection here and ht_weight from before ******** split, then do triple loop chaining 
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
