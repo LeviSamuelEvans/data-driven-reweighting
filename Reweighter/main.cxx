@@ -52,7 +52,8 @@ int main(int argc, char *argv[])
     std::vector<std::string> const_samples; // Samples to keep constant (filenames)
     std::vector<std::string> data_samples;  // Data samples (filenames)
     std::string output_file;                // Output filename
-    std::string selection;                  // Selection
+    std::string selection;                  // Orthogonal Region Selection
+    std::string ttbb_selection;             // ttbb HF selection
     std::string weight_expr;                // Weight expression
     std::string reweight_var;               // Variable to use for reweighting
     float min_bin_width;                    // Minimum width of histogram bins
@@ -72,7 +73,8 @@ int main(int argc, char *argv[])
         ("constSample", po::value(&const_samples)->multitoken(), "List of filenames not to be reweighted.") //
         ("dataSample", po::value(&data_samples)->multitoken(), "List of filenames to use as data.")         //
         ("weight", po::value(&weight_expr), "MC weight expression")                                         //
-        ("outputFile", po::value(&output_file)->default_value("out.root"), "Output filename");              //
+        ("outputFile", po::value(&output_file)->default_value("out.root"), "Output filename")              //
+        ("ttbb_selection", po::value(&ttbb_selection), "ttbb HF selection");                                   //
 
     po::options_description cmdline_options;
     cmdline_options.add(commandline).add(config);
@@ -100,22 +102,30 @@ int main(int argc, char *argv[])
         "nJets == 8",
         "nJets >= 9",
     };
-    // region + "/" "/" + r + 
-    /* Compute bins for reweighting */
+
+    /*|================================================|
+      | Compute bins for reweighting using rew samples |
+      |================================================|*/
+
     std::map<std::string, std::vector<float>> rew_bins;
-    {
+    {   std::cout << "\033[1;32m==================================" << std::endl;
+        std::cout << "The samples used for defining bins" << std::endl;
+        std::cout << "==================================\033[0m" << std::endl;
         TChain chain("nominal_Loose");
         for (auto &r : region) // Loop over the regions defined in the header file
             {
-            for (auto &s : rew_samples) // Loop over the new samples to be included
+            for (auto &s : rew_samples) // Loop over the rew samples to be included
                 {
             std::string path = base_path + "/" + r + "/" + s + ".root";
-            std::cout << "LE" << path << std::endl;
+            std::cout << path << std::endl;
             chain.Add(path.c_str());
                 }
             }
         int n_entries = chain.GetEntries();
-
+        std::cout << n_entries << std::endl;
+        std::cout << "\033[1;32m=======================" << std::endl;
+        std::cout << "Computing the bins...." << std::endl;
+        std::cout << "=======================\033[0m" << std::endl;
         for (const std::string &cut : Cuts)
         {
             ROOT::RDF::RNode df = ROOT::RDataFrame(chain);
@@ -128,6 +138,9 @@ int main(int argc, char *argv[])
 
             if (!selection.empty())
                 df = df.Filter(selection);
+            if (!ttbb_selection.empty())
+                df = df.Filter(ttbb_selection);
+            std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + ")");
@@ -193,10 +206,9 @@ int main(int argc, char *argv[])
             {
                 for (auto &s : rew_samples) // Loop over the new samples to be included
                     {
-            std::string path = base_path + "/" + r + "/" + s + ".root";
-            std::cout << "LE" << path << std::endl;
-            chain.Add(path.c_str());
-                }
+                std::string path = base_path + "/" + r + "/" + s + ".root";
+                chain.Add(path.c_str());
+            }
             }
             int n_entries = chain.GetEntries();
 
@@ -210,6 +222,7 @@ int main(int argc, char *argv[])
 
             if (!selection.empty())
                 df = df.Filter(selection);
+                // Add ttbb selection here Levi *************************
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + ")");
@@ -229,15 +242,18 @@ int main(int argc, char *argv[])
         }
         /* */
 
-        /* Get const. histogram */
+          /*|==============================|
+            | Get Const. sample Histograms |
+            |==============================|*/
+
         {
             TChain chain("nominal_Loose");
                 for (auto &r : region) // Loop over the regions defined in the header file
                 {
-                    for (auto &s : rew_samples) // Loop over the new samples to be included
+                    for (auto &s : const_samples) // Loop over the new samples to be included
                     {
                     std::string path = base_path + "/" + r + "/" + s + ".root";
-                    std::cout << "LE" << path << std::endl;
+                    
                     chain.Add(path.c_str());
                     }
                 }
@@ -253,6 +269,7 @@ int main(int argc, char *argv[])
 
             if (!selection.empty())
                 df = df.Filter(selection);
+                // find a way to add ttc/ttlight selection here and ht_weight from before ******** split, then do triple loop chaining 
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + ")");
@@ -260,15 +277,18 @@ int main(int argc, char *argv[])
         }
         /* */
 
-        /* Get data histogram */
+        /*|============================|
+          | Get Data sample Histograms |
+          |============================|*/
+
         {
             TChain chain("nominal_Loose");
             for (auto &r : region) // Loop over the regions defined in the header file
             {
-                for (auto &s : rew_samples) // Loop over the new samples to be included
+                for (auto &s : data_samples) // Loop over the new samples to be included
                 {
                 std::string path = base_path + "/" + r + "/" + s + ".root";
-                std::cout << "LE" << path << std::endl;
+                
                 chain.Add(path.c_str());
                 }
             }
