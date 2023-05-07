@@ -7,10 +7,8 @@ In order to run the code, you will first need to setup the appropriate enviromen
 ```
 source compile.sh
 ```
-The compilation script will setup the ATLAS enviroment, the 22.2.60 release of AnalysisBase and compile the reweighting code. You will then want to run 
-```
-source build/*/setup.sh
-```
+The compilation script will setup the ATLAS enviroment, the 22.2.60 release of AnalysisBase and compile the reweighting code. 
+
 Recompile the code with :
 ```
 source recompile.sh
@@ -45,8 +43,13 @@ Due to the loose pre-selection the analysis utilises, finding an orthogonal regi
 - the $t\bar{t} +\geq 2b$ region 
 
 This region is defined through the following selection :
+For Single-lepton
 ```
 (((DeepSets_tt_1b_fraction>=0.19 && DeepSets_tt_1b_fraction<= 0.32 && DeepSets_class == 1) || (DeepSets_tt_2b_fraction>=0.19 && DeepSets_tt_2b_fraction<= 0.521 && DeepSets_class == 3) || (DeepSets_ttB_fraction >= 0.19 && DeepSets_ttB_fraction<=0.31 && DeepSets_class == 2)))
+```
+For Dilepton
+```
+To add...
 ```
 Here, the `DeepSets_class` refers to the output class of the multi-class classifcation transformer used in the analysis, and is used to remove any overlaps when forming this new region. 
 
