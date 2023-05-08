@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
             if (!ttbb_selection.empty())
                 df = df.Filter(ttbb_selection);
             // check our selection is working as intended
-            std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
+            //std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + ")");
@@ -236,11 +236,11 @@ int main(int argc, char *argv[])
 
             if (!selection.empty())
                 df = df.Filter(selection);
-            std::cout << "Number of events before ttbb selection: " << df.Count().GetValue() << std::endl;
+            //std::cout << "Number of events before ttbb selection: " << df.Count().GetValue() << std::endl;
             if (!ttbb_selection.empty())
                 df = df.Filter(ttbb_selection);
             // check our selection is working as intended
-            std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
+            //std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + ")"); // ad
@@ -267,7 +267,7 @@ int main(int argc, char *argv[])
         // The ttlight Sample 
         // Apply HF selection and apply already derived reweighting 
         
-         {
+        {
             TChain chain("nominal_Loose");
                 for (auto &r : region) // Loop over the regions defined in the header file
                 {
@@ -287,10 +287,10 @@ int main(int argc, char *argv[])
             ProgressBar pb(n_entries, "  Creating const. ttlight hist.");
             count_result.OnPartialResult(n_entries / 100, std::ref(pb));
             /* */
-            std::cout << "Number of ttbar events before selection: " << df.Count().GetValue() << std::endl;
+            //std::cout << "Number of ttbar events before selection: " << df.Count().GetValue() << std::endl;
             if (!selection.empty())
                 df = df.Filter(selection);
-            std::cout << "Number of ttbar events passing selection: " << df.Count().GetValue() << std::endl;
+            //std::cout << "Number of ttbar events passing selection: " << df.Count().GetValue() << std::endl;
             if (!ttlight_selection.empty())
                 df.Filter(ttlight_selection);
             // check our selection is working as intended
@@ -300,6 +300,43 @@ int main(int argc, char *argv[])
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + ")"); // add the ht_rew already derived 
             const_hist_ttlight = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
+        }
+        // The ttc Sample 
+        // Apply HF selection and apply already derived reweighting, plus post-fit scale factor 
+
+        {
+            TChain chain("nominal_Loose");
+                for (auto &r : region) // Loop over the regions defined in the header file
+                {
+                    for (auto &s : ttc_samples) // Loop over the new samples to be included
+                    {
+                    std::string path = base_path + "/" + r + "/" + s + ".root";
+                        
+                        chain.Add(path.c_str());
+                    }
+                }
+            int n_entries = chain.GetEntries();
+
+            ROOT::RDF::RNode df = ROOT::RDataFrame(chain);
+
+            /* Display progress */
+            ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
+            ProgressBar pb(n_entries, "  Creating const. ttc hist.");
+            count_result.OnPartialResult(n_entries / 100, std::ref(pb));
+            /* */
+            //std::cout << "Number of ttbar events before selection: " << df.Count().GetValue() << std::endl;
+            if (!selection.empty())
+                df = df.Filter(selection);
+            //std::cout << "Number of ttbar events passing selection: " << df.Count().GetValue() << std::endl;
+            if (!ttc_selection.empty())
+                df.Filter(ttc_selection);
+            // check our selection is working as intended
+            //std::cout << "Number of ttc events passing selection: " << df.Count().GetValue() << std::endl;
+            // " * NormFactor)"
+            df = df.Filter(cut);
+            df = df.Define("x", "(float)(" + reweight_var + ")");
+            df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + " * " + std::to_string(NormFactor) + ")"); // add the ht_rew already derived and ttc normalisation
+            const_hist_ttc = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
         }
 
         {
@@ -367,10 +404,8 @@ int main(int argc, char *argv[])
         /* */
 
         // Substract all const. values from data histogram
-        /* 
-        if (!data_hist.Add(&const_hist, -1.) || !data_hist.Add(&const_hist_ttlight, -1.)) for new const. samples Levi ******
-        */
-        if (!data_hist.Add(&const_hist, -1.) || !data_hist.Add(&const_hist_ttlight, -1.))
+        
+        if (!data_hist.Add(&const_hist, -1.) || !data_hist.Add(&const_hist_ttlight, -1.) || !data_hist.Add(&const_hist_ttc, -1.))
         {
             std::cerr << "ERROR: Histogram addition failed" << std::endl;
             return EXIT_FAILURE;
