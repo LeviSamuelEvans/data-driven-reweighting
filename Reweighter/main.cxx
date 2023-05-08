@@ -46,21 +46,23 @@ private:
 int main(int argc, char *argv[])
 {
     // Arguments
-    std::string configFile;                 // Config filename
-    std::string base_path;                  // Path to sample files
-    std::vector<std::string> rew_samples;   // Samples to reweight (filenames)
-    std::vector<std::string> const_samples; // Samples to keep constant (filenames)
-    std::vector<std::string> data_samples;  // Data samples (filenames)
-    std::string output_file;                // Output filename
-    std::string selection;                  // Orthogonal Region Selection
-    std::string ttbb_selection;             // ttbb HF selection
-    std::string ttc_selection;              // ttc HF selection
-    std::string ttlight_selection;          // ttlight HF selection 
-    std::string weight_expr;                // Weight expression
-    std::string reweight_var;               // Variable to use for reweighting
-    std::string ttbarReweight;              // include reweighting prev. done for ttbar
-    float min_bin_width;                    // Minimum width of histogram bins
-    float NormFactor;                       // Scaling applied to the ttc Sample 
+    std::string configFile;                  // Config filename
+    std::string base_path;                   // Path to sample files
+    std::vector<std::string> rew_samples;    // Samples to reweight (filenames)
+    std::vector<std::string> const_samples;  // Samples to keep constant (filenames)
+    std::vector<std::string> ttlight_samples;// ttlight samples also to be kept constant but convininent for splitting 
+    std::vector<std::string> ttc_samples;    // ttc samples also to be kept constant but convininent for splitting 
+    std::vector<std::string> data_samples;   // Data samples (filenames)
+    std::string output_file;                 // Output filename
+    std::string selection;                   // Orthogonal Region Selection
+    std::string ttbb_selection;              // ttbb HF selection
+    std::string ttc_selection;               // ttc HF selection
+    std::string ttlight_selection;           // ttlight HF selection 
+    std::string weight_expr;                 // Weight expression
+    std::string reweight_var;                // Variable to use for reweighting
+    std::string ttbarReweight;               // include reweighting prev. done for ttbar
+    float min_bin_width;                     // Minimum width of histogram bins
+    float NormFactor;                        // Scaling applied to the ttc Sample 
 
 
     po::options_description commandline("Command-line options");
@@ -69,21 +71,23 @@ int main(int argc, char *argv[])
         ("configFile,c", po::value(&configFile), "The name of the config file"); //
 
     po::options_description config("Configuration");
-    config.add_options()                                                                                    //
-        ("selection", po::value(&selection), "Event selection")                                             //
-        ("basePath", po::value(&base_path), "Path to ntuples")                                              //
-        ("reweightVar", po::value(&reweight_var), "Variable to reweight")                                   //
-        ("minBinWidth", po::value(&min_bin_width), "Minimum width of rew. bins")                            //
-        ("reweightSample", po::value(&rew_samples)->multitoken(), "List of filenames to reweight.")         //
-        ("constSample", po::value(&const_samples)->multitoken(), "List of filenames not to be reweighted.") //
-        ("dataSample", po::value(&data_samples)->multitoken(), "List of filenames to use as data.")         //
-        ("weight", po::value(&weight_expr), "MC weight expression")                                         //
-        ("outputFile", po::value(&output_file)->default_value("out.root"), "Output filename")               //
-        ("ttbb_selection", po::value(&ttbb_selection), "ttbb HF selection")                                 //
-        ("ttc_selection", po::value(&ttc_selection), "ttc HF selection")                                    //
-        ("ttlight_selection", po::value(&ttlight_selection), "ttlight HF selection")                        //
-        ("ttbarReweight", po::value(&ttbarReweight), "including previous reweighting done for ttc/ttlight") //
-        ("NormFactor"), po::value(&NormFactor), "Scaling the ttc sample yield by the post-fit value"        //
+    config.add_options()                                                                                                //
+        ("selection", po::value(&selection), "Event selection")                                                         //
+        ("basePath", po::value(&base_path), "Path to ntuples")                                                          //
+        ("reweightVar", po::value(&reweight_var), "Variable to reweight")                                               //
+        ("minBinWidth", po::value(&min_bin_width), "Minimum width of rew. bins")                                        //
+        ("reweightSample", po::value(&rew_samples)->multitoken(), "List of filenames to reweight.")                     //
+        ("constSample", po::value(&const_samples)->multitoken(), "List of filenames not to be reweighted.")             //
+        ("ttlightSample", po::value(&ttlight_samples)->multitoken(), "List of ttbar filenames not to be reweighted.")   //
+        ("ttcSample", po::value(&ttc_samples)->multitoken(), "List of ttbar filenames not to be reweighted.")           //
+        ("dataSample", po::value(&data_samples)->multitoken(), "List of filenames to use as data.")                     //
+        ("weight", po::value(&weight_expr), "MC weight expression")                                                     //
+        ("outputFile", po::value(&output_file)->default_value("out.root"), "Output filename")                           //
+        ("ttbb_selection", po::value(&ttbb_selection), "ttbb HF selection")                                             //
+        ("ttc_selection", po::value(&ttc_selection), "ttc HF selection")                                                //
+        ("ttlight_selection", po::value(&ttlight_selection), "ttlight HF selection")                                    //
+        ("ttbarReweight", po::value(&ttbarReweight), "including previous reweighting done for ttc/ttlight")             //
+        ("NormFactor", po::value(&NormFactor), "Scaling the ttc sample yield by the post-fit value");                   //
 
     po::options_description cmdline_options;
     cmdline_options.add(commandline).add(config);
@@ -201,8 +205,8 @@ int main(int argc, char *argv[])
         auto &bins = rew_bins[cut];
         int n_bins = bins.size() - 1;
 
-        // Histograms for computing reweighting factors
-        TH1D rew_hist, const_hist, data_hist;
+        // Initialise histograms for computing reweighting factors
+        TH1D rew_hist, const_hist_ttlight, const_hist_ttc, const_hist, data_hist;
 
         // Integrals for reweighting interpolation
         std::vector<float> fdx(n_bins);
@@ -232,6 +236,7 @@ int main(int argc, char *argv[])
 
             if (!selection.empty())
                 df = df.Filter(selection);
+            std::cout << "Number of events before ttbb selection: " << df.Count().GetValue() << std::endl;
             if (!ttbb_selection.empty())
                 df = df.Filter(ttbb_selection);
             // check our selection is working as intended
@@ -259,6 +264,44 @@ int main(int argc, char *argv[])
             | Get Const. sample Histograms |
             |==============================|*/
 
+        // The ttlight Sample 
+        // Apply HF selection and apply already derived reweighting 
+        
+         {
+            TChain chain("nominal_Loose");
+                for (auto &r : region) // Loop over the regions defined in the header file
+                {
+                    for (auto &s : ttlight_samples) // Loop over the new samples to be included
+                    {
+                    std::string path = base_path + "/" + r + "/" + s + ".root";
+                        
+                        chain.Add(path.c_str());
+                    }
+                }
+            int n_entries = chain.GetEntries();
+
+            ROOT::RDF::RNode df = ROOT::RDataFrame(chain);
+
+            /* Display progress */
+            ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
+            ProgressBar pb(n_entries, "  Creating const. ttlight hist.");
+            count_result.OnPartialResult(n_entries / 100, std::ref(pb));
+            /* */
+            std::cout << "Number of ttbar events before selection: " << df.Count().GetValue() << std::endl;
+            if (!selection.empty())
+                df = df.Filter(selection);
+            std::cout << "Number of ttbar events passing selection: " << df.Count().GetValue() << std::endl;
+            if (!ttlight_selection.empty())
+                df.Filter(ttlight_selection);
+            // check our selection is working as intended
+            std::cout << "Number of ttlight events passing selection: " << df.Count().GetValue() << std::endl;
+            
+            df = df.Filter(cut);
+            df = df.Define("x", "(float)(" + reweight_var + ")");
+            df = df.Define("w", "(float)(" + weight_expr + ")"); // add the ht_rew already derived 
+            const_hist_ttlight = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
+        }
+
         {
             TChain chain("nominal_Loose");
                 for (auto &r : region) // Loop over the regions defined in the header file
@@ -266,8 +309,8 @@ int main(int argc, char *argv[])
                     for (auto &s : const_samples) // Loop over the new samples to be included
                     {
                     std::string path = base_path + "/" + r + "/" + s + ".root";
-                    
-                    chain.Add(path.c_str());
+                        
+                        chain.Add(path.c_str());
                     }
                 }
             int n_entries = chain.GetEntries();
@@ -283,7 +326,6 @@ int main(int argc, char *argv[])
             if (!selection.empty())
                 df = df.Filter(selection);
             
-                // find a way to add ttc/ttlight selection here and ht_weight from before ******** split, then do triple loop chaining 
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + ")");
@@ -324,8 +366,11 @@ int main(int argc, char *argv[])
         }
         /* */
 
-        // Substract const values from data histogram
-        if (!data_hist.Add(&const_hist, -1.))
+        // Substract all const. values from data histogram
+        /* 
+        if (!data_hist.Add(&const_hist, -1.) || !data_hist.Add(&const_hist_ttlight, -1.)) for new const. samples Levi ******
+        */
+        if (!data_hist.Add(&const_hist, -1.) || !data_hist.Add(&const_hist_ttlight, -1.))
         {
             std::cerr << "ERROR: Histogram addition failed" << std::endl;
             return EXIT_FAILURE;
