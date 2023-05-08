@@ -119,6 +119,12 @@ int main(int argc, char *argv[])
     /* |================================================|
        | Compute bins for reweighting using rew samples |
        |================================================| */
+    std::cout << "\033[1;32m===================================================================" << std::endl;
+    std::cout << "The Orthogonal Region being used for the derivation is defined by :" << std::endl;
+    std::cout << "====================================================================\033[0m" << std::endl;
+    std::cout << "==================================" << std::endl;
+    std::cout << selection << std::endl;
+    std::cout << "==================================" << std::endl;
 
     std::map<std::string, std::vector<float>> rew_bins;
     {   std::cout << "\033[1;32m==================================" << std::endl;
@@ -168,7 +174,7 @@ int main(int argc, char *argv[])
             std::vector<float> rew_weights = w.GetValue();
 
             /* Compute bins */
-            float min_n = 50.f;
+            float min_n = 500.f;
             std::vector<size_t> idx(rew_var.size());
             std::iota(idx.begin(), idx.end(), 0);
             std::sort(idx.begin(), idx.end(), [&rew_var](size_t i1, size_t i2)
@@ -294,7 +300,7 @@ int main(int argc, char *argv[])
             if (!ttlight_selection.empty())
                 df.Filter(ttlight_selection);
             // check our selection is working as intended
-            std::cout << "Number of ttlight events passing selection: " << df.Count().GetValue() << std::endl;
+            //std::cout << "Number of ttlight events passing selection: " << df.Count().GetValue() << std::endl;
             
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
@@ -577,6 +583,18 @@ int main(int argc, char *argv[])
         std::cerr << "ERROR: Failed to create output file" << std::endl;
         return EXIT_FAILURE;
     }
+    // Print the values of the vectors to verify the procedure is working
+    std::cout << "Printing values of the 'rew_selection' vector:" << std::endl;
+    for (const auto& val : rew_selection) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "Printing values of the 'rew_factor' vector:" << std::endl;
+    for (const auto& val : rew_factor) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
 
     f->WriteObject(&rew_selection, "selection");
     f->WriteObject(&rew_factor, "factors");

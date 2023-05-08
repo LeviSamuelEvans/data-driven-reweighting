@@ -8,6 +8,7 @@ g++ output.cpp -o output `root-config --cflags --libs`
 #include <vector>
 #include "TFile.h"
 #include "TTree.h"
+#include <fstream>
 
 using namespace std;
 
