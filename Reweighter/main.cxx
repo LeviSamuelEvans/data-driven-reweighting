@@ -298,7 +298,7 @@ int main(int argc, char *argv[])
             
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
-            df = df.Define("w", "(float)(" + weight_expr + ")"); // add the ht_rew already derived 
+            df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + ")"); // add the ht_rew already derived 
             const_hist_ttlight = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
         }
 
