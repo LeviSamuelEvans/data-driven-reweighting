@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
             std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
-            df = df.Define("w", "(float)(" + weight_expr + ")");
+            df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + ")"); // ad
             df = df.Define("wx", "w * x");
             df = df.Define("wx2", "wx * x");
             auto hist_fdx = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w");
