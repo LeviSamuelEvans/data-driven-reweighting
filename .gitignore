@@ -3,4 +3,7 @@ build
 CMakeFiles/
 osCheck.py
 CMakeCache.txt
-output/
+output/*
+Condor/error/*
+Condor/output/*
+Condor/logs/*
