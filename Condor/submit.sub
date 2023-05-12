@@ -1,0 +1,16 @@
+
+executable = /scratch4/levans/data-driven-reweighting/Condor/reweight.sh
+arguments = config_1l.cfg $(ClusterId)$(ProcId)
+universe = vanilla
++MaxRuntime = 3600 
+
+output = /scratch4/levans/data-driven-reweighting/Condor/output/output.$(ClusterId)$(ProcId).out
+error = /scratch4/levans/data-driven-reweighting/Condor/error/error.$(ClusterId)$(ProcId).err
+log = /scratch4/levans/data-driven-reweighting/Condor/log/condor.$(ClusterId)$(ProcId).log
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+queue
+
+

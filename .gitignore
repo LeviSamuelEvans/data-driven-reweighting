@@ -3,6 +3,8 @@ build
 CMakeFiles/
 osCheck.py
 CMakeCache.txt
-
-# Ignore an entire directory
-output/
+output/*
+Condor/error/*
+Condor/output/*
+Condor/logs/*
+reweighting_1l.root
