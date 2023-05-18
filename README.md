@@ -13,6 +13,10 @@ Recompile the code with :
 ```
 source recompile.sh
 ```
+To run the code :
+```
+reweight --configFile <path/to/config/config_file>
+```
 The options used in the code are steered by a configuration file, with the following options available for configuration:
 
 | Option Name             | Description |
@@ -95,5 +99,18 @@ k_{i}\sum_{j}w_{j} = \sum_{j}(a_{i}HT^{2} + b_{i}HT + c_{i})w_{j} \; \; \; \; \t
 This sets up a system of linear equations that is solved for $a_{i}$, $b_{i}$ and $c_{i}$.
 
 -----------------------------------
+
+In order to prevent the profile likelihood fit undoing some of the re-weighting procedure outlined here, a scaling is applied to the ttc,ttb,ttB and ttbb samples. These scale factors are derived from the fit, in which they are free-floated. These are outlined below :
+
+| Component              | Normalisation Factor |
+| ----                   | -----
+| $t\bar{t} +\geq2b \ 1l$    | 1.11  |
+| $t\bar{t} +\geq1c \ 1l$    | 1.66  |
+| $t\bar{t} + 1b/B \ 1l$     | 1.30  |
+| $t\bar{t} +\geq2b \ 2l$    | 1.26  |
+| $t\bar{t} +\geq1c \ 2l$    | 1.61  |
+| $t\bar{t} + 1b/B \ 2l$     | 0.97  |
+
+
 
 Some alternative to this could be using Kernal Density Estimation (KDE) techniques, or using a ML algorithm to learn a mapping between the data and MC distributions. However, a simple approach is used, for now...
