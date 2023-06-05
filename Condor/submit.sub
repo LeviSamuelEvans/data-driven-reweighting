@@ -1,16 +1,16 @@
 
 executable = /scratch4/levans/data-driven-reweighting/Condor/reweight.sh
-arguments = config_1l.cfg $(ClusterId)$(ProcId)
+arguments = $config $(ClusterId)$(ProcId)
 universe = vanilla
-+MaxRuntime = 3600 
++MaxRuntime = 3600
 
-output = /scratch4/levans/data-driven-reweighting/Condor/output/output.$(ClusterId)$(ProcId).out
-error = /scratch4/levans/data-driven-reweighting/Condor/error/error.$(ClusterId)$(ProcId).err
-log = /scratch4/levans/data-driven-reweighting/Condor/log/condor.$(ClusterId)$(ProcId).log
+output = /scratch4/levans/data-driven-reweighting/Condor/output/output_$config_.$(ClusterId)$(ProcId).out
+error = /scratch4/levans/data-driven-reweighting/Condor/error/error_$config_.$(ClusterId)$(ProcId).err
+log = /scratch4/levans/data-driven-reweighting/Condor/log/log_$config_.$(ClusterId)$(ProcId).log
 
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
 
-queue
+queue config in (config_1l_nominal_DipolePS.cfg, config_1l_nominal_PH7.cfg, config_1l_nominal_PP8.cfg, config_1l_nominal_PP8_ptHard1.cfg)
 
 
