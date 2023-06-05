@@ -65,10 +65,12 @@ int main(int argc, char *argv[])
     std::string fakes_weight_expr;              // Fakes weight expression
     std::string reweight_var;                   // Variable to use for reweighting
     std::string ttbarReweight;                  // include reweighting prev. done for ttbar
+    std::vector<std::string> channelNumbers;   // Channel numbers for which this reweighting is applied
     float min_bin_width;                        // Minimum width of histogram bins
     float NormFactor_ttc;                       // Scaling applied to the ttc Sample
     float NormFactor_ttb;                       // Scaling applied to the ttb/B Sample
     float NormFactor_ttbb;                      // Scaling applied to the ttbb Sample
+
 
 
     po::options_description commandline("Command-line options");
@@ -99,8 +101,8 @@ int main(int argc, char *argv[])
         ("ttbarReweight", po::value(&ttbarReweight), "including previous reweighting done for ttc/ttlight")             //
         ("NormFactor_ttc", po::value(&NormFactor_ttc), "Scaling the ttc sample yield by the post-fit value")            //
         ("NormFactor_ttb", po::value(&NormFactor_ttb), "Scaling the ttb sample yield by the post-fit value")            //
-        ("NormFactor_ttbb", po::value(&NormFactor_ttbb), "Scaling the ttbb sample yield by the post-fit value");        //
-
+        ("NormFactor_ttbb", po::value(&NormFactor_ttbb), "Scaling the ttbb sample yield by the post-fit value")         //
+        ("channelNumbers", po::value(&channelNumbers)->multitoken(), "MC_Channel_Number/DSID for the sample");          //                        //
 
     po::options_description cmdline_options;
     cmdline_options.add(commandline).add(config);
@@ -128,7 +130,7 @@ int main(int argc, char *argv[])
         "nJets >= 8",
         //"nJets >= 9",
     };
-
+    
     /*
        ================================================
         Compute bins for reweighting using rew samples
@@ -219,6 +221,7 @@ int main(int argc, char *argv[])
     /* Compute reweighting */
     std::vector<std::string> rew_selection;
     std::vector<std::string> rew_factor;
+    std::vector<std::string> vec_bin_str;
     for (auto &cut : Cuts)
     {
         std::cout << std::endl;
@@ -257,13 +260,13 @@ int main(int argc, char *argv[])
 
             if (!selection.empty())
                 df = df.Filter(selection);
-            std::cout << "Number of events before ttbb selection: " << df.Count().GetValue() << std::endl;
+            //std::cout << "Number of events before ttbb selection: " << df.Count().GetValue() << std::endl;
             if (!ttbb_selection.empty())
                 df = df.Filter(ttbb_selection);
             if (!ttbb_selection_comp.empty())
                 df = df.Filter(ttbb_selection_comp);
             // check our selection is working as intended
-            std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
+            //std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + " * " + std::to_string(NormFactor_ttbb) + ")");
@@ -427,7 +430,6 @@ int main(int argc, char *argv[])
             ================
             - apply fakes weight
             - DO NOT apply other weight string
-            - add code for dealing with 2l fakes
 
         */
 
@@ -543,7 +545,7 @@ int main(int argc, char *argv[])
         // Normalize histograms
         data_hist.Scale(1. / data_hist.Integral());
         rew_hist_ttbb.Scale(1. / rew_hist_ttbb.Integral());
-        rew_hist_ttbb.Scale(1. / rew_hist_ttb.Integral());
+        rew_hist_ttb.Scale(1. / rew_hist_ttb.Integral());
 
         // Combine ttbb and ttb histograms
         rew_hist = rew_hist_ttbb;
@@ -689,12 +691,30 @@ int main(int argc, char *argv[])
         std::vector<float> b(x.data() + 1 * n_bins, x.data() + 2 * n_bins);
         std::vector<float> c(x.data() + 2 * n_bins, x.data() + 3 * n_bins);
 
+            // Init string for bins
+        std::string bin_str = "(" + cut + ")" + " (mcChannelNumber == ";
+        for (const std::string &chan_num : channelNumbers) {
+            if (chan_num == channelNumbers.back()) {
+                bin_str += chan_num + "): " + std::to_string(bins[0] * 100);
+            } else {
+                bin_str += chan_num + ", ";
+            }
+        }
+
         std::string var_str = "(" + reweight_var + ")";
         for (int i = 0; i < n_bins; ++i)
         {
-            std::string sel = "(" + cut + ") && " +
-                              var_str + " >= " + std::to_string(bins[i]) + " && " +
-                              var_str + " < " + std::to_string(bins[i + 1]);
+            std::string sel = "(" + cut + ") && (";
+            for (const std::string &chan_num : channelNumbers) {
+                if (chan_num == channelNumbers.back()) {
+                    sel += "(mcChannelNumber == " + chan_num + ")";
+                } else {
+                    sel += "(mcChannelNumber == " + chan_num + ") || ";
+                }
+            }
+            sel += ") && " + var_str + " >= " + std::to_string(bins[i]) + " && " + var_str + " < " + std::to_string(bins[i + 1]);
+            bin_str += std::to_string(bins[i + 1] * 100) + ", ";
+
             rew_selection.push_back(sel);
 
             std::ostringstream sout;
@@ -703,7 +723,9 @@ int main(int argc, char *argv[])
                  << b[i] << " * " + var_str + " + " << c[i];
             rew_factor.push_back(sout.str());
         }
+        vec_bin_str.push_back(bin_str);
     }
+
 
     TFile *f = TFile::Open(output_file.c_str(), "RECREATE");
     if (!f)
@@ -726,6 +748,7 @@ int main(int argc, char *argv[])
 
     f->WriteObject(&rew_selection, "selection");
     f->WriteObject(&rew_factor, "factors");
+    f->WriteObject(&vec_bin_str, "binning");
 
     f->Write();
     f->Close();
