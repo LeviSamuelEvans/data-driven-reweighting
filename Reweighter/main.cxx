@@ -60,15 +60,15 @@ int main(int argc, char *argv[])
     std::string ttc_selection;                  // ttc HF selection
     std::string ttlight_selection;              // ttlight HF selection
     std::string ttbb_selection_comp;            // tt+bb HF selection components
-    std::string ttb_selection_comp;             // tt+b/B HF selection components 
+    std::string ttb_selection_comp;             // tt+b/B HF selection components
     std::string weight_expr;                    // Weight expression
     std::string fakes_weight_expr;              // Fakes weight expression
     std::string reweight_var;                   // Variable to use for reweighting
     std::string ttbarReweight;                  // include reweighting prev. done for ttbar
     float min_bin_width;                        // Minimum width of histogram bins
     float NormFactor_ttc;                       // Scaling applied to the ttc Sample
-    float NormFactor_ttb;                       // Scaling applied to the ttb/B Sample 
-    float NormFactor_ttbb;                      // Scaling applied to the ttbb Sample 
+    float NormFactor_ttb;                       // Scaling applied to the ttb/B Sample
+    float NormFactor_ttbb;                      // Scaling applied to the ttbb Sample
 
 
     po::options_description commandline("Command-line options");
@@ -129,9 +129,9 @@ int main(int argc, char *argv[])
         //"nJets >= 9",
     };
 
-    /* 
+    /*
        ================================================
-        Compute bins for reweighting using rew samples 
+        Compute bins for reweighting using rew samples
        ================================================
     */
     std::cout << "\033[1;32m===================================================================" << std::endl;
@@ -257,16 +257,16 @@ int main(int argc, char *argv[])
 
             if (!selection.empty())
                 df = df.Filter(selection);
-            //std::cout << "Number of events before ttbb selection: " << df.Count().GetValue() << std::endl;
+            std::cout << "Number of events before ttbb selection: " << df.Count().GetValue() << std::endl;
             if (!ttbb_selection.empty())
                 df = df.Filter(ttbb_selection);
             if (!ttbb_selection_comp.empty())
                 df = df.Filter(ttbb_selection_comp);
             // check our selection is working as intended
-            //std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
+            std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
-            df = df.Define("w", "(float)(" + weight_expr + " * " + std::to_string(NormFactor_ttbb) + ")"); 
+            df = df.Define("w", "(float)(" + weight_expr + " * " + std::to_string(NormFactor_ttbb) + ")");
             df = df.Define("wx", "w * x");
             df = df.Define("wx2", "wx * x");
             auto hist_fdx = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w");
@@ -314,7 +314,7 @@ int main(int argc, char *argv[])
             //std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
-            df = df.Define("w", "(float)(" + weight_expr + " * " + std::to_string(NormFactor_ttb) + ")"); 
+            df = df.Define("w", "(float)(" + weight_expr + " * " + std::to_string(NormFactor_ttb) + ")");
             df = df.Define("wx", "w * x");
             df = df.Define("wx2", "wx * x");
             auto hist_fdx = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w");
@@ -331,19 +331,19 @@ int main(int argc, char *argv[])
         }
         /* */
 
-        /*   
+        /*
              ============================
              Get Const. sample Histograms
              ============================
         */
 
         /*  ==================
-            The ttlight Sample 
+            The ttlight Sample
             ==================
-        
-        // - Apply HF selection  
-        // - Apply already derived reweighting 
-        
+
+        // - Apply HF selection
+        // - Apply already derived reweighting
+
         */
 
         {
@@ -353,7 +353,7 @@ int main(int argc, char *argv[])
                     for (auto &s : ttlight_samples) // Loop over the new samples to be included
                     {
                     std::string path = base_path + "/" + r + "/" + s + ".root";
-                        
+
                         chain.Add(path.c_str());
                     }
                 }
@@ -374,18 +374,18 @@ int main(int argc, char *argv[])
                 df.Filter(ttlight_selection);
             // check our selection is working as intended
             //std::cout << "Number of ttlight events passing selection: " << df.Count().GetValue() << std::endl;
-            
+
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
-            df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + ")"); // add the ht_rew already derived 
+            df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + ")"); // add the ht_rew already derived
             const_hist_ttlight = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
         }
         /*  ===============
-            The ttc Sample 
+            The ttc Sample
             ===============
-            - Apply HF selection 
+            - Apply HF selection
             - Apply already derived reweighting
-            - Apply post-fit scale factor 
+            - Apply post-fit scale factor
         */
 
         {
@@ -395,7 +395,7 @@ int main(int argc, char *argv[])
                     for (auto &s : ttc_samples) // Loop over the new samples to be included
                     {
                     std::string path = base_path + "/" + r + "/" + s + ".root";
-                        
+
                         chain.Add(path.c_str());
                     }
                 }
@@ -423,11 +423,11 @@ int main(int argc, char *argv[])
             const_hist_ttc = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
         }
         /*  ================
-            The fakes Sample 
+            The fakes Sample
             ================
             - apply fakes weight
-            - DO NOT apply other weight string 
-            - add code for dealing with 2l fakes 
+            - DO NOT apply other weight string
+            - add code for dealing with 2l fakes
 
         */
 
@@ -438,7 +438,7 @@ int main(int argc, char *argv[])
                     for (auto &s : fakes_samples) // Loop over the new samples to be included
                     {
                     std::string path = base_path + "/" + r + "/" + s + ".root";
-                        
+
                         chain.Add(path.c_str());
                     }
                 }
@@ -453,7 +453,7 @@ int main(int argc, char *argv[])
             /* */
             if (!selection.empty())
                 df = df.Filter(selection);
-            
+
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + fakes_weight_expr + ")");
@@ -463,7 +463,7 @@ int main(int argc, char *argv[])
             ========================
             All other const. samples
             ========================
-        
+
         */
 
         {
@@ -473,7 +473,7 @@ int main(int argc, char *argv[])
                     for (auto &s : const_samples) // Loop over the new samples to be included
                     {
                     std::string path = base_path + "/" + r + "/" + s + ".root";
-                        
+
                         chain.Add(path.c_str());
                     }
                 }
@@ -489,7 +489,7 @@ int main(int argc, char *argv[])
 
             if (!selection.empty())
                 df = df.Filter(selection);
-            
+
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + ")");
@@ -497,7 +497,7 @@ int main(int argc, char *argv[])
         }
         /* */
 
-        /* 
+        /*
            ==========================
            Get Data sample Histograms
            ==========================
@@ -510,7 +510,7 @@ int main(int argc, char *argv[])
                 for (auto &s : data_samples) // Loop over the new samples to be included
                 {
                 std::string path = base_path + "/" + r + "/" + s + ".root";
-                
+
                 chain.Add(path.c_str());
                 }
             }
@@ -533,7 +533,7 @@ int main(int argc, char *argv[])
         /* */
 
         // Substract all const. values from data histogram
-        
+
         if (!data_hist.Add(&const_hist, -1.) || !data_hist.Add(&const_hist_ttlight, -1.) || !data_hist.Add(&const_hist_ttc, -1.) || !data_hist.Add(&const_hist_fakes, -1.))
         {
             std::cerr << "ERROR: Histogram addition failed" << std::endl;
