@@ -102,14 +102,17 @@ This sets up a system of linear equations that is solved for $a_{i}$, $b_{i}$ an
 
 In order to prevent the profile likelihood fit undoing some of the re-weighting procedure outlined here, a scaling is applied to the ttc,ttb,ttB and ttbb samples. These scale factors are derived from the fit, in which they are free-floated. These are outlined below :
 
-| Component              | Normalisation Factor |
-| ----                   | -----
-| $t\bar{t} +\geq2b \ 1l$    | 1.11  |
-| $t\bar{t} +\geq1c \ 1l$    | 1.66  |
-| $t\bar{t} + 1b/B \ 1l$     | 1.30  |
-| $t\bar{t} +\geq2b \ 2l$    | 1.26  |
-| $t\bar{t} +\geq1c \ 2l$    | 1.61  |
-| $t\bar{t} + 1b/B \ 2l$     | 0.97  |
+| Component              | Nominal   | ptHard1 | Dipole PS | PH7   | muR_muF | ISR | FSR
+| ----                   | -----     |  ----- | -----   | -----    | -----   | ----- | -----       |
+| $t\bar{t} +\geq2b \ 1l$    | 1.11  |   1    |   1     |    1     |   1     |    1     |    1     |
+| $t\bar{t} +\geq1c \ 1l$    | 1.66  |   1    |   1     |    1     |   1     |    1     |    1     |
+| $t\bar{t} + 1b/B \ 1l$     | 1.30  |   1    |   1     |    1     |   1     |    1     |    1     |
+| $t\bar{t} + light \ 1l$    | 1  |   1    |   1     |    1     |   1     |    1     |    1     |
+| $t\bar{t} +\geq2b \ 2l$    | 1.26  |   1    |   1     |    1     |   1     |    1     |    1     |
+| $t\bar{t} +\geq1c \ 2l$    | 1.61  |   1    |   1     |    1     |   1     |    1     |    1     |
+| $t\bar{t} + 1b/B \ 2l$     | 0.97  |   1    |   1     |    1     |   1     |    1     |    1     |
+| $t\bar{t} + light \ 2l$    | 1  |   1    |   1     |    1     |   1     |    1     |    1     |
+
 
 
 
