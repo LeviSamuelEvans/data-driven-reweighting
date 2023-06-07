@@ -49,11 +49,11 @@ Due to the loose pre-selection the analysis utilises, finding an orthogonal regi
 This region is defined through the following selection :
 For Single-lepton
 ```
-(((DeepSets_tt_1b_fraction>=0.19 && DeepSets_tt_1b_fraction<= 0.32 && DeepSets_class == 1) || (DeepSets_tt_2b_fraction>=0.19 && DeepSets_tt_2b_fraction<= 0.521 && DeepSets_class == 3) || (DeepSets_ttB_fraction >= 0.19 && DeepSets_ttB_fraction<=0.31 && DeepSets_class == 2)))
+(((L2_Class_tt1b_fraction >=0.19 && L2_Class_tt1b_fraction <= 0.32 && L2_Class_class == 1) || (L2_Class_tt2b_fraction >= 0.19 && L2_Class_tt2b_fraction <= 0.521 && L2_Class_class == 3) || (L2_Class_tt1B_fraction >= 0.19 && L2_Class_tt1B_fraction<=0.31 && L2_Class_class == 2)))
 ```
 For Dilepton
 ```
-(((DeepSets_tt_1b_fraction>=0.19 && DeepSets_tt_1b_fraction<= 0.32 && DeepSets_class == 1) || (DeepSets_tt_2b_fraction>=0.19 && DeepSets_tt_2b_fraction<= 0.521 && DeepSets_class == 3) || (DeepSets_ttB_fraction >= 0.19 && DeepSets_ttB_fraction<=0.31 && DeepSets_class == 2)))
+(((L2_Class_tt1b_fraction >=0.19 && L2_Class_tt1b_fraction <= 0.32 && L2_Class_class == 1) || (L2_Class_tt2b_fraction >= 0.19 && L2_Class_tt2b_fraction <= 0.521 && L2_Class_class == 3) || (L2_Class_tt1B_fraction >= 0.19 && L2_Class_tt1B_fraction<=0.31 && L2_Class_class == 2)))
 ```
 Here, the `DeepSets_class` refers to the output class of the multi-class classifcation transformer used in the analysis, and is used to remove any overlaps when forming this new region.
 
