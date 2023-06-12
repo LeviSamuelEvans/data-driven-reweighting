@@ -100,20 +100,21 @@ This sets up a system of linear equations that is solved for $a_{i}$, $b_{i}$ an
 
 -----------------------------------
 
-In order to prevent the profile likelihood fit undoing some of the re-weighting procedure outlined here, a scaling is applied to the ttc,ttb,ttB and ttbb samples. These scale factors are derived from the fit, in which they are free-floated. These are outlined below :
+In order to prevent the profile likelihood fit undoing some of the re-weighting procedure outlined here, a scaling is applied to the ttc,ttb,ttB and ttbb samples. These scale factors are derived from the fit, in which they are free-floated. These are outlined below for the first stage of the reweighting (ttc/ttlight) :
 
-| Component              | Nominal   | ptHard1 | Dipole PS | PH7   | muR_muF | ISR | FSR
-| ----                   | -----     |  ----- | -----   | -----    | -----   | ----- | -----       |
-| $t\bar{t} +\geq2b \ 1l$    | 1.11  |   1    |   1     |    1     |   1     |    1     |    1     |
-| $t\bar{t} +\geq1c \ 1l$    | 1.66  |   1    |   1     |    1     |   1     |    1     |    1     |
-| $t\bar{t} + 1b/B \ 1l$     | 1.30  |   1    |   1     |    1     |   1     |    1     |    1     |
-| $t\bar{t} + light \ 1l$    | 1  |   1    |   1     |    1     |   1     |    1     |    1     |
-| $t\bar{t} +\geq2b \ 2l$    | 1.26  |   1    |   1     |    1     |   1     |    1     |    1     |
-| $t\bar{t} +\geq1c \ 2l$    | 1.61  |   1    |   1     |    1     |   1     |    1     |    1     |
-| $t\bar{t} + 1b/B \ 2l$     | 0.97  |   1    |   1     |    1     |   1     |    1     |    1     |
-| $t\bar{t} + light \ 2l$    | 1  |   1    |   1     |    1     |   1     |    1     |    1     |
+| Component                  | Nominal | ptHard1 | Dipole PS | PH7   | muR_muF | ISR | FSR
+| ----                       | ----- | ----- | -----  | -----  | -----   | ----- | ----- |
+| $t\bar{t} +\geq2b \ 1l$    | 0.95  | 0.83  |  0.94  |  1.07  |  0.70  |  0.95  | 0.83  |
+| $t\bar{t} +\geq1c \ 1l$    | 1.76  | 1.64  |  1.67  |  1.31  |  1.73  |  1.75  | 1.33  |
+| $t\bar{t} + 1b/B \ 1l$     | 1.11  | 0.86  |  1.15  |  1.30  |  0.79  |  1.11  | 1.04  |
+| $t\bar{t} + light \ 1l$    | 0.78  | 0.63  |  0.82  |  0.87  |  0.70  |  0.80  | 0.78  |
+| $t\bar{t} +\geq2b \ 2l$    | 0.93  | 0.75  |  0.87  |  0.88  |  0.74  |  0.94  | 0.94  |
+| $t\bar{t} +\geq1c \ 2l$    | 1.59  | 1.59  |  1.60  |  1.29  |  1.62  |  1.58  | 1.49  |
+| $t\bar{t} + 1b/B \ 2l$     | 1.29  | 0.97  |  1.31  |  1.32  |  0.95  |  1.31  | 1.38  |
+| $t\bar{t} + light \ 2l$    | 0.85  | 0.74  |  0.83  |  0.71  |  0.74  |  0.85  | 0.92  |
 
 The alternative sample scaling factors are derived from a fit in which the respective systematic samples are treated as nominal, by fixing the nuisance parameter values to their nominal value of 1.
 
+The second stage involves again deriving scaling factors but this time instead with new normalisation factors, with the re-weighting for ttc/ttlight included.
 
 Some alternative to this could be using Kernal Density Estimation (KDE) techniques, or using a ML algorithm to learn a mapping between the data and MC distributions. However, a simple approach is used, for now...
