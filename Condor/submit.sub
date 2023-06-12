@@ -11,6 +11,6 @@ log = /scratch4/levans/data-driven-reweighting/Condor/log/log_$config_.$(Cluster
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
 
-queue config in (config_1l_nominal_DipolePS.cfg, config_1l_nominal_PH7.cfg, config_1l_nominal_PP8.cfg, config_1l_nominal_PP8_ptHard1.cfg)
+queue 
 
 
