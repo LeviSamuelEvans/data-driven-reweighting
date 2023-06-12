@@ -109,8 +109,8 @@ In order to prevent the profile likelihood fit undoing some of the re-weighting 
 | $t\bar{t} + 1b/B \ 1l$     | 1.11  | 0.86  |  1.15  |  1.30  |  0.79  |  1.11  | 1.04  |
 | $t\bar{t} + light \ 1l$    | 0.78  | 0.63  |  0.82  |  0.87  |  0.70  |  0.80  | 0.78  |
 | $t\bar{t} +\geq2b \ 2l$    | 0.93  | 0.75  |  0.87  |  0.88  |  0.74  |  0.94  | 0.94  |
-| $t\bar{t} +\geq1c \ 2l$    | 1.59  | 1.59  |  1.60  |  1.29  |  1.62  |  1.58  | 1.49  |
-| $t\bar{t} + 1b/B \ 2l$     | 1.29  | 0.97  |  1.31  |  1.32  |  0.95  |  1.31  | 1.38  |
+| $t\bar{t} +\geq1c \ 2l$    | 1.59  | 1.59  |  1.60  |  1.29  |  1.62  |  1.58  | 1.38  |
+| $t\bar{t} + 1b/B \ 2l$     | 1.29  | 0.97  |  1.31  |  1.32  |  0.95  |  1.31  | 1.49  |
 | $t\bar{t} + light \ 2l$    | 0.85  | 0.74  |  0.83  |  0.71  |  0.74  |  0.85  | 0.92  |
 
 The alternative sample scaling factors are derived from a fit in which the respective systematic samples are treated as nominal, by fixing the nuisance parameter values to their nominal value of 1.
