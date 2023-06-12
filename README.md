@@ -113,7 +113,7 @@ In order to prevent the profile likelihood fit undoing some of the re-weighting 
 | $t\bar{t} + 1b/B \ 2l$     | 0.97  |   1    |   1     |    1     |   1     |    1     |    1     |
 | $t\bar{t} + light \ 2l$    | 1  |   1    |   1     |    1     |   1     |    1     |    1     |
 
-
+The alternative sample scaling factors are derived from a fit in which the respective systematic samples are treated as nominal, by fixing the nuisance parameter values to their nominal value of 1.
 
 
 Some alternative to this could be using Kernal Density Estimation (KDE) techniques, or using a ML algorithm to learn a mapping between the data and MC distributions. However, a simple approach is used, for now...
