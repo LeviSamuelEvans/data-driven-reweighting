@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
         "nJets >= 8",
         //"nJets >= 9",
     };
-    
+
     /*
        ================================================
         Compute bins for reweighting using rew samples
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
                 df = df.Filter(ttbb_selection);
             // check our selection is working as intended
             //std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
-            df = df.Filter(cut);
+            df = df.Filter(cut + " && " + "HF_SimpleClassification == 1");
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + ")");
 
@@ -267,7 +267,7 @@ int main(int argc, char *argv[])
                 df = df.Filter(ttbb_selection_comp);
             // check our selection is working as intended
             //std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
-            df = df.Filter(cut);
+            df = df.Filter(cut + " && " + "HF_SimpleClassification == 1" +  " && " + "(HF_Classification >= 200 && HF_Classification < 1000) || HF_Classification >= 1100)");
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + " * " + std::to_string(NormFactor_ttbb) + ")");
             df = df.Define("wx", "w * x");
@@ -311,11 +311,11 @@ int main(int argc, char *argv[])
             //std::cout << "Number of events before ttbb selection: " << df.Count().GetValue() << std::endl;
             if (!ttbb_selection.empty())
                 df = df.Filter(ttbb_selection);
-            if (!ttbb_selection_comp.empty())
+            if (!ttb_selection_comp.empty())
                 df = df.Filter(ttb_selection_comp);
             // check our selection is working as intended
             //std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
-            df = df.Filter(cut);
+            df = df.Filter(cut + " && " + "HF_SimpleClassification == 1" + " && " + "(HF_Classification >= 100 && HF_Classification < 200) || (HF_Classification >= 1000 && HF_Classification < 1100)");
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + " * " + std::to_string(NormFactor_ttb) + ")");
             df = df.Define("wx", "w * x");
@@ -378,7 +378,7 @@ int main(int argc, char *argv[])
             // check our selection is working as intended
             //std::cout << "Number of ttlight events passing selection: " << df.Count().GetValue() << std::endl;
 
-            df = df.Filter(cut);
+            df = df.Filter(cut + " && " + "HF_SimpleClassification == 0");
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + ")"); // add the ht_rew already derived
             const_hist_ttlight = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
@@ -420,7 +420,7 @@ int main(int argc, char *argv[])
             // check our selection is working as intended
             //std::cout << "Number of ttc events passing selection: " << df.Count().GetValue() << std::endl;
             // " * NormFactor_ttc)"
-            df = df.Filter(cut);
+            df = df.Filter(cut + " && " + "HF_SimpleClassification == -1");
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + " * " + std::to_string(NormFactor_ttc) + ")"); // add the ht_rew already derived and ttc normalisation
             const_hist_ttc = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
