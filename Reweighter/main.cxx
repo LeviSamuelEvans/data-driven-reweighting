@@ -267,7 +267,7 @@ int main(int argc, char *argv[])
                 df = df.Filter(ttbb_selection_comp);
             // check our selection is working as intended
             //std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
-            df = df.Filter(cut + " && " + "HF_SimpleClassification == 1" +  " && " + "(HF_Classification >= 200 && HF_Classification < 1000) || HF_Classification >= 1100)");
+            df = df.Filter(cut + " && " + "HF_SimpleClassification == 1" +  " && " + "((HF_Classification >= 200 && HF_Classification < 1000) || (HF_Classification >= 1100))");
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + " * " + std::to_string(NormFactor_ttbb) + ")");
             df = df.Define("wx", "w * x");
@@ -315,7 +315,7 @@ int main(int argc, char *argv[])
                 df = df.Filter(ttb_selection_comp);
             // check our selection is working as intended
             //std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
-            df = df.Filter(cut + " && " + "HF_SimpleClassification == 1" + " && " + "(HF_Classification >= 100 && HF_Classification < 200) || (HF_Classification >= 1000 && HF_Classification < 1100)");
+            df = df.Filter(cut + " && " + "HF_SimpleClassification == 1" + " && " + "((HF_Classification >= 100 && HF_Classification < 200) || (HF_Classification >= 1000 && HF_Classification < 1100))");
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + " * " + std::to_string(NormFactor_ttb) + ")");
             df = df.Define("wx", "w * x");
