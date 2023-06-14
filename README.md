@@ -1,13 +1,21 @@
 ## Introduction
 
-The goal is to reduce the data/MC mis-modelling of $HT_{all}$ for $t\bar{t}+\geq{2b}$ components in the ttH(bb) full Run 2 Legacy analysis. The procedure used here obatins re-weighting factors for the $HT$ distribution through a data-driven reweighting approach, paramterised on $HT_{all}$ and the number of final state jets, denoted ` nJets`.
+The goal is to reduce the data/MC mis-modelling of $HT_{all}$ for $tt+\geq{1b}$ components in the ttH(bb) full Run  Legacy analysis. The procedure used here obtains a re-weighting interpolation function that is then applied to the $HT$ distribution, through a data-driven  approach, paramterised on $HT_{all}$ and the number of final state jets, denoted ` nJets`. The $tt+\geq{1b}$ is the main contributor to background present in the signal regions.
+
+The $HT_{all}$ observable is given by the scalar sum of the transverse momenta of all leptons and jets in the final state, shown below. 
+``` math
+ HT_{all} = \sum_{j}p_{T,j}^{jet} + \sum_{i}p_{T,i}^{lep}
+
+```
+
+Since this analysis performs a differential measurement of the signal strength in bins of the Higgs boson $p_{T}$, it is clear that this observable needs to be well-modelled, in order to have a good extrapolation of the main background components to the signal regions. The region used for deriving the parameterised interpolation function is given below in the method section.
 
 #### Running the code :
 In order to run the code, you will first need to setup the appropriate enviroment. Inside a clean shell and the cloned repository, run the following :
 ```
 source compile.sh
 ```
-The compilation script will setup the ATLAS enviroment, the 22.2.60 release of AnalysisBase and compile the reweighting code.
+The compilation script will setup the ATLAS enviroment, the . release of AnalysisBase and compile the reweighting code.
 
 Recompile the code with :
 ```
@@ -25,7 +33,7 @@ The options used in the code are steered by a configuration file, with the follo
 |  weight                       |  weight string to apply to MC                      |
 |   selection                  |  pre-selection you would like to apply to the MC and data samples                      |
 |   reweightVar             |  The name of the observable you want to reweight                       |
-|   minBinWidth            |   The minimum width of the bin used in the region, e.g 50 GeV for the case of reweighting HT                      |
+|   minBinWidth            |   The minimum width of the bin used in the region, e.g  GeV for the case of reweighting HT                      |
 |   outputFile                |   The name of the output .root file containing the re-weighting factors, stored as a vector.                  |
 |     reweightSample                               |   The samples you would like to be used in the reweighting                      |
 | constSample | The samples you would like to keep constant in the calculation |
@@ -33,42 +41,47 @@ The options used in the code are steered by a configuration file, with the follo
 | ttc_selection  | Apply a selection to the ttbar sampe for only ttc HF events |
 | ttlight_selection | Apply a selection to the ttbar sampe for only ttlight HF events |
 | ttbar_Reweight| Apply weight string for ttc/ttlight reweighting in ttbb derivation |
-| NormFactor |  Apply Post-fit normalisation scaling to ttc sample |
+| NormFactor_ttc |  Apply Post-fit normalisation scaling to ttc sample |
+| NormFactor_ttb |  Apply Post-fit normalisation scaling to ttb/B sample |
+| NormFactor_ttbb |  Apply Post-fit normalisation scaling to ttbb sample |
+| NormFactor_ttlight |  Apply Post-fit normalisation scaling to ttlight sample |
 
-- Two example configuration files are given under the names config_1l.cfg and config_2l.cfg.
+The configs directory contains configuration files for both 1l and 2l. Included in these, are configuration files for the derivation w.r.t the nominal samples, and the alternative samples that are used as systematic variations. 
 
-Inside the Analysis directory you will find a script that will transform the root output file into a text file with the selection and factors.
+Inside the output directory, you will find a python script `root_to_txt.py` that will convert the .root file output to a .txt file, that is to be used in the Reweighting tool for the level  ntuple productions, such that the re-weigthing will be available as a weight that can be applied. https://gitlab.cern.ch/atlasHTop/TTHbbAnalysis/-/tree/master/ReweightingTool
 
 #### Method :
-Due to the loose pre-selection the analysis utilises, finding an orthogonal region appropriately enriched in $t\bar{t} +\geq1b$ components to derive these re-weighting factors is difficult, in contrast to the approach for $t\bar{t} +\geq1c$ and $t\bar{t} +$light.  As such, the first bins from the following control regions were removed from the profile likelihood fit and combined, in order to generate a new orthogonal region. Since these bins are not very pure in each relevant component of $t\bar{t} +\geq1b$, the overall effect on the results of the backrgound-only fit to data and fit to Asimov data are minimal.
+Due to the loose pre-selection the analysis utilises, finding an orthogonal region appropriately enriched in $tt +\geq1b$ components to derive these re-weighting factors is difficult, in contrast to the approach for $tt +\geq1c$ and $tt +$light.  As such, the first bins from the following control regions were removed from the profile likelihood fit and combined, in order to generate a new orthogonal region. Since these bins are not very pure in each relevant component of $tt +\geq1b$, the overall effect on the results of the backrgound-only fit to data and fit to Asimov data are minimal.
 
-- the $t\bar{t} + B$ region
-- the  $t\bar{t} + 1b$  region
-- the $t\bar{t} +\geq 2b$ region
+- the $tt + B$ region
+- the  $tt + 1b$  region
+- the $tt +\geq 2b$ region
 
 This region is defined through the following selection :
-For Single-lepton
+
+###### For Single-lepton
 ```
-(((L2_Class_tt1b_fraction >=0.19 && L2_Class_tt1b_fraction <= 0.32 && L2_Class_class == 1) || (L2_Class_tt2b_fraction >= 0.19 && L2_Class_tt2b_fraction <= 0.521 && L2_Class_class == 3) || (L2_Class_tt1B_fraction >= 0.19 && L2_Class_tt1B_fraction<=0.31 && L2_Class_class == 2)))
+(((L2_Class_tt1b_fraction >= && L2_Class_tt1b_fraction <=  && L2_Class_class == ) || (L2_Class_tt2b_fraction >=  && L2_Class_tt2b_fraction <=  && L2_Class_class == ) || (L2_Class_tt1B_fraction >=  && L2_Class_tt1B_fraction<= && L2_Class_class == )))
 ```
-For Dilepton
+
+###### For Dilepton
 ```
-(((L2_Class_tt1b_fraction >=0.19 && L2_Class_tt1b_fraction <= 0.32 && L2_Class_class == 1) || (L2_Class_tt2b_fraction >= 0.19 && L2_Class_tt2b_fraction <= 0.521 && L2_Class_class == 3) || (L2_Class_tt1B_fraction >= 0.19 && L2_Class_tt1B_fraction<=0.31 && L2_Class_class == 2)))
+(((L2_Class_tt1b_fraction >= && L2_Class_tt1b_fraction <=  && L2_Class_class == ) || (L2_Class_tt2b_fraction >=  && L2_Class_tt2b_fraction <=  && L2_Class_class == ) || (L2_Class_tt1B_fraction >=  && L2_Class_tt1B_fraction<= && L2_Class_class == )))
 ```
 Here, the `DeepSets_class` refers to the output class of the multi-class classifcation transformer used in the analysis, and is used to remove any overlaps when forming this new region.
 
 -----------------------------------
 
-For the derivation of the factors, only the tt$+\geq1b$ samples are used. The other samples are removed from the MC, and an equal amount is then subtracted from the data ( i.e we multiply the weights by -1 and combine with the data samples.)
+For the derivation of the factors, only the tt$+\geq1b$ samples are used. The other samples are removed from the MC, and an equal amount is then subtracted from the data ( i.e we multiply the weights by - and combine with the data samples.)
 
 On top of the selection above, it should be noted the intial pre-selection for the region is defined by
 ```
-5j3b@70 for Single Lepton, 3j3b@85,2b@70 for Dilepton
+5j3b@ for Single Lepton, 3j3b@,2b@ for Dilepton
 ```
 The bins of the distribution in the newly defined orthogonal region used in the re-weighting procedure, that is performed bin-by-bin, are selected based on the following conditions :
 
-1. each bin should contain at least 500 events
-2. each bin should be at least 50 GeV wide
+. each bin should contain at least  events
+. each bin should be at least  GeV wide
 
 -----------------------------------
 
@@ -81,39 +94,39 @@ The MC samples are first normalised to have the same total as data*, where data*
 
 In order to make sure there is a smooth transition between consecutive bins, a smooth function, $\mathcal{f}(HT)$, is chosen for the reweigthing, as opposed to constant factors in each bin.
 
-A piecewise function composed of $2^{nd}$ order polynomials in each bin is used. This is also required to be continous and have a continous first order derivative. Requiring the piecewise function to be continuous and have a continuous first-order derivative ensures that the resulting smooth curve is well-behaved and does not have any abrupt changes or discontinuities that could introduce artifacts or biases into the reweighting, thus we ensure that the values of the function are smoothly connected across the bin boundaries, resulting in a smooth curve that accurately represents the underlying distribution.
+A piecewise function composed of $^{nd}$ order polynomials in each bin is used. This is also required to be continous and have a continous first order derivative. Requiring the piecewise function to be continuous and have a continuous first-order derivative ensures that the resulting smooth curve is well-behaved and does not have any abrupt changes or discontinuities that could introduce artifacts or biases into the reweighting, thus we ensure that the values of the function are smoothly connected across the bin boundaries, resulting in a smooth curve that accurately represents the underlying distribution.
 
 This is given by :
 
 ``` math
- {f}(HT) = a_{i}HT^{2} + b_{i}HT + c_{i}
+ {f}(HT) = a_{i}HT^{} + b_{i}HT + c_{i}
 
 ```
 
 Finally, due to the condition of the number of events in each bin should be the same using the smooth reweighting, we get the following :
 
 ``` math
-k_{i}\sum_{j}w_{j} = \sum_{j}(a_{i}HT^{2} + b_{i}HT + c_{i})w_{j} \; \; \; \; \text{for} \;  j \in { \text{events in bin} \; i }
+k_{i}\sum_{j}w_{j} = \sum_{j}(a_{i}HT^{} + b_{i}HT + c_{i})w_{j} \; \; \; \; \text{for} \;  j \in { \text{events in bin} \; i }
 
 ```
 This sets up a system of linear equations that is solved for $a_{i}$, $b_{i}$ and $c_{i}$.
 
 -----------------------------------
 
-In order to prevent the profile likelihood fit undoing some of the re-weighting procedure outlined here, a scaling is applied to the ttc,ttb,ttB and ttbb samples. These scale factors are derived from the fit, in which they are free-floated. These are outlined below for the first stage of the reweighting (ttc/ttlight) :
+Due to the known mismodelling of the flavour composition in the 4FS and 5FS scheme tt samples, a scaling is applied to the ttc,ttb,ttB and ttbb samples. These scale factors are derived from a background-only fit to data, in which the relevant component normalisations are they are free-floated. These are outlined below.
 
-| Component                  | Nominal | ptHard1 | Dipole PS | PH7   | muR_muF | ISR | FSR
-| ----                       | ----- | ----- | -----  | -----  | -----   | ----- | ----- |
-| $t\bar{t} +\geq2b \ 1l$    | 0.95  | 0.83  |  0.94  |  1.07  |  0.70  |  0.95  | 0.83  |
-| $t\bar{t} +\geq1c \ 1l$    | 1.76  | 1.64  |  1.67  |  1.31  |  1.73  |  1.75  | 1.33  |
-| $t\bar{t} + 1b/B \ 1l$     | 1.11  | 0.86  |  1.15  |  1.30  |  0.79  |  1.11  | 1.04  |
-| $t\bar{t} + light \ 1l$    | 0.78  | 0.63  |  0.82  |  0.87  |  0.70  |  0.80  | 0.78  |
-| $t\bar{t} +\geq2b \ 2l$    | 0.93  | 0.75  |  0.87  |  0.88  |  0.74  |  0.94  | 0.94  |
-| $t\bar{t} +\geq1c \ 2l$    | 1.59  | 1.59  |  1.60  |  1.29  |  1.62  |  1.58  | 1.38  |
-| $t\bar{t} + 1b/B \ 2l$     | 1.29  | 0.97  |  1.31  |  1.32  |  0.95  |  1.31  | 1.49  |
-| $t\bar{t} + light \ 2l$    | 0.85  | 0.74  |  0.83  |  0.71  |  0.74  |  0.85  | 0.92  |
+| ttbar Flavour Components                  | Nominal | ptHard1 | Dipole PS | PH7   | scale_UP | scale_DO | ISR_UP | ISR_DO |FSR_UP | FSR_DO
+| ------                   | ----- | ----- | -----  | -----  | -----   | ----- | ----- | ---- | ---- | ---- |
+| $tt +\geq2b$    |   |   |    |    |    |    |   |
+| $tt +\geq1c$    |   |   |    |    |    |    |   |
+| $tt + 1b/B$     |   |   |    |    |    |    |   |
+| $tt + light$    |   |   |    |    |    |    |   |
+| $tt +\geq2b$    |  |   |    |    |    |    |   |
+| $tt +\geq1c$    |   |   |    |    |    |    |   |
+| $tt + 1b/B$     |   |   |    |    |    |    |   |
+| $tt + light$    |   |   |    |    |    |    |   |
 
-The alternative sample scaling factors are derived from a fit in which the respective systematic samples are treated as nominal, by fixing the nuisance parameter values to their nominal value of 1.
+The alternative sample scaling factors are derived from a fit in which the respective systematic samples are treated as nominal, by fixing the nuisance parameter values to their nominal value of .
 
 The second stage involves again deriving scaling factors but this time instead with new normalisation factors, with the re-weighting for ttc/ttlight included.
 
