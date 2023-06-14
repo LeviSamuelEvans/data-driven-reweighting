@@ -1,1 +1,47 @@
-# Write python script for HT RW jobs
+#=================================#
+# Condor Jobs for HT Re-weighting #
+#=================================#
+
+import os
+import subprocess
+
+def create_submission_files(configs, output_folder):
+
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    for index, config in enumerate(configs):
+
+        sh_filename = f"reweight_{index}.sh"
+        sh_filepath = os.path.join(output_folder, sh_filename)
+        with open(sh_filepath, 'w') as sh_file:
+            sh_file.write(f"#!/bin/bash\n\n")
+            sh_file.write(f"cd /scratch4/levans/data-driven-reweighting/\n")
+            sh_file.write(f"source compile.sh\n")
+            sh_file.write(f"reweight --configFile {config}\n")
+
+
+        sub_filename = f"reweight_{index}.sub"
+        sub_filepath = os.path.join(output_folder, sub_filename)
+        with open(sub_filepath, 'w') as sub_file:
+            sub_file.write(f"executable = {sh_filepath}\n")
+            sub_file.write(f"arguments = {config} $(ClusterId)$(ProcId)\n")
+            sub_file.write("universe = vanilla\n")
+            sub_file.write("+MaxRuntime = 3600\n")
+            sub_file.write(f"output = {output_folder}/output/output_{index}_.$(ClusterId)$(ProcId).out\n")
+            sub_file.write(f"error = {output_folder}/error/error_{index}_.$(ClusterId)$(ProcId).err\n")
+            sub_file.write(f"log = {output_folder}/log/log_{index}_.$(ClusterId)$(ProcId).log\n")
+            sub_file.write("should_transfer_files = YES\n")
+            sub_file.write("when_to_transfer_output = ON_EXIT\n")
+            sub_file.write("queue\n")
+
+        #submit
+        subprocess.run(['condor_submit', sub_filepath], check=True)
+
+
+configs = [
+    "Configs/Nominal/1l/config_1l_nominal_PP8.cfg",
+]
+output_folder = "/scratch4/levans/data-driven-reweighting/Condor"
+
+create_submission_files(configs, output_folder)
