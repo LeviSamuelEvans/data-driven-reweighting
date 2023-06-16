@@ -7,4 +7,6 @@ output/*.root
 Condor/error/*
 Condor/output/*
 Condor/logs/*
+Condor/bashScripts/*
+Condor/Submit/*
 output/*/*.root
