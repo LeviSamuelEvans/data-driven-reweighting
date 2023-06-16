@@ -61,12 +61,12 @@ This region is defined through the following selection :
 
 ###### For Single-lepton
 ```
-(((L2_Class_tt1b_fraction >= && L2_Class_tt1b_fraction <=  && L2_Class_class == ) || (L2_Class_tt2b_fraction >=  && L2_Class_tt2b_fraction <=  && L2_Class_class == ) || (L2_Class_tt1B_fraction >=  && L2_Class_tt1B_fraction<= && L2_Class_class == )))
+selection = (((L2_Class_tt1b_fraction >=0.19 && L2_Class_tt1b_fraction <= 0.32 && L2_Class_class == 1) || (L2_Class_tt2b_fraction >= 0.19 && L2_Class_tt2b_fraction <= 0.521 && L2_Class_class == 3) || (L2_Class_tt1B_fraction >= 0.19 && L2_Class_tt1B_fraction<=0.31 && L2_Class_class == 2)))
 ```
 
 ###### For Dilepton
 ```
-(((L2_Class_tt1b_fraction >= && L2_Class_tt1b_fraction <=  && L2_Class_class == ) || (L2_Class_tt2b_fraction >=  && L2_Class_tt2b_fraction <=  && L2_Class_class == ) || (L2_Class_tt1B_fraction >=  && L2_Class_tt1B_fraction<= && L2_Class_class == )))
+selection = (((L2_Class_tt1b_fraction >=0.19 && L2_Class_tt1b_fraction <= 0.3548 && L2_Class_class == 1) || (L2_Class_tt2b_fraction >= 0.19 && L2_Class_tt2b_fraction <= 0.418 && L2_Class_class == 3) || (L2_Class_tt1B_fraction >= 0.19 && L2_Class_tt1B_fraction<=0.3489 && L2_Class_class == 2)))
 ```
 Here, the `DeepSets_class` refers to the output class of the multi-class classifcation transformer used in the analysis, and is used to remove any overlaps when forming this new region.
 
@@ -113,21 +113,56 @@ This sets up a system of linear equations that is solved for $a_{i}$, $b_{i}$ an
 
 -----------------------------------
 
-Due to the known mismodelling of the flavour composition in the 4FS and 5FS scheme tt samples, a scaling is applied to the ttc,ttb,ttB and ttbb samples. These scale factors are derived from a background-only fit to data, in which the relevant component normalisations are they are free-floated. These are outlined below.
+Due to the known mismodelling of the flavour composition in the 4FS and 5FS scheme tt samples, a scaling is applied to the ttc,ttb,ttB and ttbb samples. These scale factors are derived from a background-only fit to data, in which the relevant component normalisations are free-floated. These are outlined below.
 
-| ttbar Flavour Components                  | Nominal | ptHard1 | Dipole PS | PH7   | scale_UP | scale_DO | ISR_UP | ISR_DO |FSR_UP | FSR_DO
-| ------                   | ----- | ----- | -----  | -----  | -----   | ----- | ----- | ---- | ---- | ---- |
-| $tt +\geq2b$    |   |   |    |    |    |    |   |
-| $tt +\geq1c$    |   |   |    |    |    |    |   |
-| $tt + 1b/B$     |   |   |    |    |    |    |   |
-| $tt + light$    |   |   |    |    |    |    |   |
-| $tt +\geq2b$    |  |   |    |    |    |    |   |
-| $tt +\geq1c$    |   |   |    |    |    |    |   |
-| $tt + 1b/B$     |   |   |    |    |    |    |   |
-| $tt + light$    |   |   |    |    |    |    |   |
+| Flavour Components | Nominal K-factor |
+| ------          | ----- |
+| 1l : $tt +\geq2b$    | 0.95  |
+| 1l : $tt +\geq1c$    | 1.76  |
+| 1l : $tt + 1b/B$     | 1.11  |
+| 1l : $tt + light$    | 0.78  |
+| 2l : $tt +\geq2b$    | 0.93  | 
+| 2l : $tt +\geq1c$    | 1.59  |
+| 2l : $tt + 1b/B$     | 1.29  |
+| 2l : $tt + light$    | 0.85  |
 
-The alternative sample scaling factors are derived from a fit in which the respective systematic samples are treated as nominal, by fixing the nuisance parameter values to their nominal value of .
+Note : Re-derive with fake factor fakes estimation
 
-The second stage involves again deriving scaling factors but this time instead with new normalisation factors, with the re-weighting for ttc/ttlight included.
+Some alternatives to this approach would be using Kernal Density Estimation (KDE) techniques, or using a ML algorithm to learn a mapping between the data and MC distributions.
 
-Some alternative to this could be using Kernal Density Estimation (KDE) techniques, or using a ML algorithm to learn a mapping between the data and MC distributions. However, a simple approach is used, for now...
+Alternartive interpolation functions could also be used, e.g
+
+- Spline Interpolation: Spline interpolation uses piecewise-defined polynomial functions to interpolate between data points. It provides a smooth and flexible interpolation that can capture complex shapes in your data.
+- Radial Basis Functions (RBF): RBF interpolation uses radial basis functions, such as Gaussian functions or inverse multiquadrics, to interpolate data. RBFs can handle irregularly spaced data and provide smooth interpolations.
+- Kriging: Kriging, also known as Gaussian process regression, is a statistical interpolation technique that models the data as a random process. It can capture complex spatial correlations and provide uncertainty estimates for the interpolated values.
+
+
+#### Basic Workflow 
+```mermaid
+graph TD
+    A[Initial background-only fit to data] -- k_tt2b --> B[K-Factors]
+    A[Initial background-only fit to data] -- k_ttb  --> B[K-Factors]
+    A[Initial background-only fit to data] -- k_ttB  --> B[K-Factors]
+    A[Initial background-only fit to data] -- k_ttc  --> B[K-Factors]
+    A[Initial background-only fit to data] -- k_ttlight  --> B[K-Factors]
+    B  -- Nominal --> C[Process 2]
+    B  -- Alternative * Systematic normalisations --> C[Deriving HT re-weighting for ttc & ttlight]
+    C -- Nominal --> D[Process 3]
+    C -- Apply ttc/light RW --> D[Process 3]
+    C -- Alternative * Systematic normalisations --> D[Deriving HT re-weighting for ttb]
+    D -- Apply ttc/light RW--> E[Re-derive Systematic normalisations]
+    D -- Apply ttb RW--> E[Re-derive Systematic normalisations]
+    E --> F[Final Fit]
+
+style A fill:#f7,stroke:#100,stroke-width:5px,font-weight:bold;
+    style D text-wrap:wrap;
+
+style B fill:#f7,stroke:#100,stroke-width:4px,font-weight:bold;
+    style D text-wrap:wrap;
+
+style C fill:#f7,stroke:#00FF00,stroke-width:4px,font-weight:bold;
+    style D text-wrap:wrap;
+
+style D fill:#f7,stroke:#0000FF,stroke-width:4px,font-weight:bold;
+    style D text-wrap:wrap;
+```
