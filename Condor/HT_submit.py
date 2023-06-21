@@ -45,8 +45,8 @@ def create_submission_files(configs, output_folder):
 
 configs = [
     # Single Lepton Config files
-    #"/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PP8.cfg", # Nominal
-    "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PH7.cfg", # PH7 PS
+    "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PP8.cfg", # Nominal
+    #"/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PH7.cfg", # PH7 PS
     # "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PP8_ptHard1.cfg", # ptHard1 Variation
     # "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_DipolePS.cfg", # DipolePS Variation
     # "/scratch4/levans/data-driven-reweighting/Configs/FSR_DOWN/1l/config_1l_FSR_DOWN_PP8.cfg", # Final State Radiation down
