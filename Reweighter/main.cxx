@@ -575,10 +575,16 @@ int main(int argc, char *argv[])
             std::cerr << "ERROR: Fakes Histogram addition failed" << std::endl;
             return EXIT_FAILURE;
         }
+        data_hist.Print();
 
         // Combine ttbb and ttb histograms
+
+        std::cout << "Before adding ttb to ttbb" << std::endl;
         rew_hist = rew_hist_ttbb;
+        rew_hist.Print();
         rew_hist.Add(&rew_hist_ttb);
+        std::cout << "After adding ttb to ttbb" << std::endl;
+        rew_hist.Print();
 
         // Normalize histograms
         data_hist.Scale(1. / data_hist.Integral());
@@ -592,6 +598,15 @@ int main(int argc, char *argv[])
             std::cerr << "ERROR: Histogram division failed" << std::endl;
             return EXIT_FAILURE;
         }
+
+        // Print the computed ratio
+        std::cout << "Computed ratio: ";
+        for (int i = 1; i <= n_bins; ++i)
+        {
+            float ratio = data_hist.GetBinContent(i);
+            std::cout << ratio << " ";
+        }
+        std::cout << std::endl;
 
         std::vector<float> factors;
         for (int i = 1; i <= n_bins; ++i)
