@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     std::string fakes_weight_expr;              // Fakes weight expression
     std::string reweight_var;                   // Variable to use for reweighting
     std::string ttbarReweight;                  // include reweighting prev. done for ttbar
-    std::vector<std::string> channelNumbers;   // Channel numbers for which this reweighting is applied
+    std::vector<std::string> channelNumbers;    // Channel numbers for which this reweighting is applied
     float min_bin_width;                        // Minimum width of histogram bins
     float NormFactor_ttc;                       // Scaling applied to the ttc Sample
     float NormFactor_ttb;                       // Scaling applied to the ttb/B Sample
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
             std::vector<float> rew_weights = w.GetValue();
 
             /* Compute bins */
-            float min_n = 500.f;
+            float min_n = 100.f;
             std::vector<size_t> idx(rew_var.size());
             std::iota(idx.begin(), idx.end(), 0);
             std::sort(idx.begin(), idx.end(), [&rew_var](size_t i1, size_t i2)
