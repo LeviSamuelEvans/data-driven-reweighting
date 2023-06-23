@@ -117,10 +117,10 @@ Due to the known mismodelling of the flavour composition in the 4FS and 5FS sche
 
 | Flavour Components | Nominal K-factor |
 | ------          | ----- |
-| 1l : $tt +\geq2b$    | 0.95  |
-| 1l : $tt +\geq1c$    | 1.76  |
-| 1l : $tt + 1b/B$     | 1.11  |
-| 1l : $tt + light$    | 0.78  |
+| 1l : $tt +\geq2b$    | 0.96  |
+| 1l : $tt +\geq1c$    | 1.79  |
+| 1l : $tt + 1b/B$     | 1.08  |
+| 1l : $tt + light$    | 0.74  |
 | 2l : $tt +\geq2b$    | 0.93  | 
 | 2l : $tt +\geq1c$    | 1.59  |
 | 2l : $tt + 1b/B$     | 1.29  |
