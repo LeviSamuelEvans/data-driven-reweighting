@@ -11,3 +11,4 @@ Condor/bashScripts/*
 Condor/Submit/*
 output/*/*.root
 output_testing_cuts/*
+Tests/*

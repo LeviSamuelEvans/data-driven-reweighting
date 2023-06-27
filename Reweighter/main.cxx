@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
             std::vector<float> rew_weights = w.GetValue();
 
             /* Compute bins */
-            float min_n = 100.f;
+            float min_n = 1000.f;
             std::vector<size_t> idx(rew_var.size());
             std::iota(idx.begin(), idx.end(), 0);
             std::sort(idx.begin(), idx.end(), [&rew_var](size_t i1, size_t i2)
@@ -473,6 +473,7 @@ int main(int argc, char *argv[])
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + fakes_weight_expr + ")");
             const_hist_fakes = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
+            const_hist_fakes.Print();
         }
         /*
             ========================
@@ -509,6 +510,7 @@ int main(int argc, char *argv[])
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + ")");
             const_hist = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
+            const_hist.Print();
         }
         /* */
 
@@ -575,7 +577,7 @@ int main(int argc, char *argv[])
             std::cerr << "ERROR: Fakes Histogram addition failed" << std::endl;
             return EXIT_FAILURE;
         }
-        data_hist.Print();
+        data_hist.Print(); // Should be equal to Data - (const_ttc + const_ttlight + const_fakes + const_other)
 
         // Combine ttbb and ttb histograms
 
@@ -591,6 +593,11 @@ int main(int argc, char *argv[])
         rew_hist.Scale(1. / rew_hist.Integral());
         //rew_hist_ttbb.Scale(1. / rew_hist_ttbb.Integral());
         //rew_hist_ttb.Scale(1. / rew_hist_ttb.Integral());
+        std::cout << "============================" << std::endl;
+        std::cout << "Histograms Normalised......." << std::endl;
+        std::cout << "============================" << std::endl;
+        rew_hist.Print();
+        data_hist.Print();
 
         // Compute ratio
         if (!data_hist.Divide(&rew_hist))
@@ -600,7 +607,7 @@ int main(int argc, char *argv[])
         }
 
         // Print the computed ratio
-        std::cout << "Computed ratio: ";
+        std::cout << "Computed ratio....: ";
         for (int i = 1; i <= n_bins; ++i)
         {
             float ratio = data_hist.GetBinContent(i);
