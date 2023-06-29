@@ -61,7 +61,7 @@ This region is defined through the following selection :
 
 ###### For Single-lepton
 ```
-selection = (((L2_Class_tt1b_fraction >=0.19 && L2_Class_tt1b_fraction <= 0.32 && L2_Class_class == 1) || (L2_Class_tt2b_fraction >= 0.19 && L2_Class_tt2b_fraction <= 0.521 && L2_Class_class == 3) || (L2_Class_tt1B_fraction >= 0.19 && L2_Class_tt1B_fraction<=0.31 && L2_Class_class == 2)))
+selection = (((L2_Class_tt1b_fraction >=0.19 && L2_Class_tt1b_fraction <= 0.3549 && L2_Class_class == 1) || (L2_Class_tt2b_fraction >= 0.19 && L2_Class_tt2b_fraction <= 0.521 && L2_Class_class == 3) || (L2_Class_tt1B_fraction >= 0.19 && L2_Class_tt1B_fraction<=0.349 && L2_Class_class == 2)))
 ```
 
 ###### For Dilepton
