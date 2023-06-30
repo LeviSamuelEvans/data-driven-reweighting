@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     std::string fakes_weight_expr;              // Fakes weight expression
     std::string reweight_var;                   // Variable to use for reweighting
     std::string ttbarReweight;                  // include reweighting prev. done for ttbar
-    std::vector<std::string> channelNumbers;   // Channel numbers for which this reweighting is applied
+    std::vector<std::string> channelNumbers;    // Channel numbers for which this reweighting is applied
     float min_bin_width;                        // Minimum width of histogram bins
     float NormFactor_ttc;                       // Scaling applied to the ttc Sample
     float NormFactor_ttb;                       // Scaling applied to the ttb/B Sample
@@ -167,21 +167,21 @@ int main(int argc, char *argv[])
             ROOT::RDF::RNode df = ROOT::RDataFrame(chain);
 
             /* Display progress */
-            ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
-            ProgressBar pb(n_entries, "Computing bins (" + cut + ")");
-            count_result.OnPartialResult(n_entries / 100, std::ref(pb));
+            //ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
+            //ProgressBar pb(n_entries, "Computing bins (" + cut + ")");
+            //count_result.OnPartialResult(n_entries / 100, std::ref(pb));
             /* */
-
+            std::cout << "Number of events in ttbb sample before deriv. region: " << df.Count().GetValue() << std::endl;
             if (!selection.empty())
                 df = df.Filter(selection);
+            std::cout << "Number of events in ttbb sample after deriv. region: " << df.Count().GetValue() << std::endl;
             if (!ttbb_selection.empty())
                 df = df.Filter(ttbb_selection);
             // check our selection is working as intended
-            //std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Filter(cut + " && " + "HF_SimpleClassification == 1");
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + ")");
-
+            std::cout << "Number of events passing HF (1) selection: " << df.Count().GetValue() << std::endl;
             auto n = df.Take<int>("nJets");
             auto v = df.Take<float>("x");
             auto w = df.Take<float>("w");
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
             std::vector<float> rew_weights = w.GetValue();
 
             /* Compute bins */
-            float min_n = 500.f;
+            float min_n = 750.f;
             std::vector<size_t> idx(rew_var.size());
             std::iota(idx.begin(), idx.end(), 0);
             std::sort(idx.begin(), idx.end(), [&rew_var](size_t i1, size_t i2)
@@ -253,21 +253,22 @@ int main(int argc, char *argv[])
             ROOT::RDF::RNode df = ROOT::RDataFrame(chain);
 
             /* Display progress */
-            ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
-            ProgressBar pb(n_entries, "  Creating rew. ttbb hist.");
-            count_result.OnPartialResult(n_entries / 100, std::ref(pb));
+            //ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
+            //ProgressBar pb(n_entries, "  Creating rew. ttbb hist.");
+            //count_result.OnPartialResult(n_entries / 100, std::ref(pb));
             /* */
 
             if (!selection.empty())
                 df = df.Filter(selection);
             //std::cout << "Number of events before ttbb selection: " << df.Count().GetValue() << std::endl;
-            if (!ttbb_selection.empty())
-                df = df.Filter(ttbb_selection);
-            if (!ttbb_selection_comp.empty())
-                df = df.Filter(ttbb_selection_comp);
+            // if (!ttbb_selection.empty())
+            //     df = df.Filter(ttbb_selection);
+            // if (!ttbb_selection_comp.empty())
+            //     df = df.Filter(ttbb_selection_comp);
             // check our selection is working as intended
             //std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Filter(cut + " && " + "HF_SimpleClassification == 1" +  " && " + "((HF_Classification >= 200 && HF_Classification < 1000) || (HF_Classification >= 1100))");
+            std::cout << "Number of events passing tt+bb comp selection: " << df.Count().GetValue() << std::endl;
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + " * " + std::to_string(NormFactor_ttbb) + ")");
             df = df.Define("wx", "w * x");
@@ -276,6 +277,8 @@ int main(int argc, char *argv[])
             auto hist_fxdx = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "wx");
             auto hist_fx2dx = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "wx2");
             rew_hist_ttbb = hist_fdx.GetValue();
+            rew_hist_ttbb.Print();
+
 
             for (int i = 0; i < n_bins; ++i)
             {
@@ -301,29 +304,32 @@ int main(int argc, char *argv[])
             ROOT::RDF::RNode df = ROOT::RDataFrame(chain);
 
             /* Display progress */
-            ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
-            ProgressBar pb(n_entries, "  Creating rew. ttb/B hist.");
-            count_result.OnPartialResult(n_entries / 100, std::ref(pb));
+            //ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
+            //ProgressBar pb(n_entries, "  Creating rew. ttb/B hist.");
+            //count_result.OnPartialResult(n_entries / 100, std::ref(pb));
             /* */
 
             if (!selection.empty())
                 df = df.Filter(selection);
             //std::cout << "Number of events before ttbb selection: " << df.Count().GetValue() << std::endl;
-            if (!ttbb_selection.empty())
-                df = df.Filter(ttbb_selection);
-            if (!ttb_selection_comp.empty())
-                df = df.Filter(ttb_selection_comp);
+            // if (!ttbb_selection.empty())
+            //     df = df.Filter(ttbb_selection);
+            // if (!ttb_selection_comp.empty())
+            //     df = df.Filter(ttb_selection_comp);
             // check our selection is working as intended
             //std::cout << "Number of events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Filter(cut + " && " + "HF_SimpleClassification == 1" + " && " + "((HF_Classification >= 100 && HF_Classification < 200) || (HF_Classification >= 1000 && HF_Classification < 1100))");
+            std::cout << "Number of events passing tt+1b/B comp selection: " << df.Count().GetValue() << std::endl;
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + " * " + std::to_string(NormFactor_ttb) + ")");
+            std::cout << "Number of tt+1b/B events after RW + weight_expr + NF " << df.Count().GetValue() << std::endl;
             df = df.Define("wx", "w * x");
             df = df.Define("wx2", "wx * x");
             auto hist_fdx = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w");
             auto hist_fxdx = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "wx");
             auto hist_fx2dx = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "wx2");
             rew_hist_ttb = hist_fdx.GetValue();
+            rew_hist_ttb.Print();
 
             for (int i = 0; i < n_bins; ++i)
             {
@@ -365,23 +371,27 @@ int main(int argc, char *argv[])
             ROOT::RDF::RNode df = ROOT::RDataFrame(chain);
 
             /* Display progress */
-            ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
-            ProgressBar pb(n_entries, "  Creating const. ttlight hist.");
-            count_result.OnPartialResult(n_entries / 100, std::ref(pb));
+            //ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
+            //ProgressBar pb(n_entries, "  Creating const. ttlight hist.");
+            //count_result.OnPartialResult(n_entries / 100, std::ref(pb));
             /* */
-            //std::cout << "Number of ttbar events before selection: " << df.Count().GetValue() << std::endl;
+            std::cout << "Number of ttbar events before selection: " << df.Count().GetValue() << std::endl;
             if (!selection.empty())
                 df = df.Filter(selection);
-            //std::cout << "Number of ttbar events passing selection: " << df.Count().GetValue() << std::endl;
+            std::cout << "Number of ttbar events passing selection: " << df.Count().GetValue() << std::endl;
             if (!ttlight_selection.empty())
                 df.Filter(ttlight_selection);
             // check our selection is working as intended
             //std::cout << "Number of ttlight events passing selection: " << df.Count().GetValue() << std::endl;
 
             df = df.Filter(cut + " && " + "HF_SimpleClassification == 0");
+            std::cout << "Number of ttlight events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + ")"); // add the ht_rew already derived
+            std::cout << "Number of ttlight events after RW + weight_expr + NF " << df.Count().GetValue() << std::endl;
             const_hist_ttlight = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
+            const_hist_ttlight.Print();
+
         }
         /*  ===============
             The ttc Sample
@@ -407,23 +417,26 @@ int main(int argc, char *argv[])
             ROOT::RDF::RNode df = ROOT::RDataFrame(chain);
 
             /* Display progress */
-            ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
-            ProgressBar pb(n_entries, "  Creating const. ttc hist.");
-            count_result.OnPartialResult(n_entries / 100, std::ref(pb));
+            //ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
+            //ProgressBar pb(n_entries, "  Creating const. ttc hist.");
+            //count_result.OnPartialResult(n_entries / 100, std::ref(pb));
             /* */
-            //std::cout << "Number of ttbar events before selection: " << df.Count().GetValue() << std::endl;
+            std::cout << "Number of ttbar events before selection: " << df.Count().GetValue() << std::endl;
             if (!selection.empty())
                 df = df.Filter(selection);
-            //std::cout << "Number of ttbar events passing selection: " << df.Count().GetValue() << std::endl;
+            std::cout << "Number of ttbar events passing selection: " << df.Count().GetValue() << std::endl;
             if (!ttc_selection.empty())
                 df.Filter(ttc_selection);
             // check our selection is working as intended
             //std::cout << "Number of ttc events passing selection: " << df.Count().GetValue() << std::endl;
             // " * NormFactor_ttc)"
             df = df.Filter(cut + " && " + "HF_SimpleClassification == -1");
+            std::cout << "Number of ttc events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + " * " + std::to_string(NormFactor_ttc) + ")"); // add the ht_rew already derived and ttc normalisation
+            std::cout << "Number of ttc events after RW + weight_expr + NF " << df.Count().GetValue() << std::endl;
             const_hist_ttc = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
+            const_hist_ttc.Print();
         }
         /*  ================
             The fakes Sample
@@ -460,6 +473,7 @@ int main(int argc, char *argv[])
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + fakes_weight_expr + ")");
             const_hist_fakes = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
+            const_hist_fakes.Print();
         }
         /*
             ========================
@@ -496,6 +510,7 @@ int main(int argc, char *argv[])
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + weight_expr + ")");
             const_hist = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
+            const_hist.Print();
         }
         /* */
 
@@ -531,25 +546,58 @@ int main(int argc, char *argv[])
             df = df.Filter(cut);
             df = df.Define("x", "(float)(" + reweight_var + ")");
             data_hist = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x").GetValue();
+            std::cout << "Data Histogram : " << std::endl;
+            data_hist.Print();
         }
         /* */
 
         // Substract all const. values from data histogram
+        // might be better to carry out sequentiially and have errors for each one
 
-        if (!data_hist.Add(&const_hist, -1.) || !data_hist.Add(&const_hist_ttlight, -1.) || !data_hist.Add(&const_hist_ttc, -1.) || !data_hist.Add(&const_hist_fakes, -1.))
+        if (!data_hist.Add(&const_hist, -1.))
         {
-            std::cerr << "ERROR: Histogram addition failed" << std::endl;
+            std::cerr << "ERROR: Constant Histogram addition failed" << std::endl;
             return EXIT_FAILURE;
         }
 
-        // Normalize histograms
-        data_hist.Scale(1. / data_hist.Integral());
-        rew_hist_ttbb.Scale(1. / rew_hist_ttbb.Integral());
-        rew_hist_ttb.Scale(1. / rew_hist_ttb.Integral());
+        if (!data_hist.Add(&const_hist_ttlight, -1.))
+        {
+            std::cerr << "ERROR: ttlight Histogram addition failed" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        if (!data_hist.Add(&const_hist_ttc, -1.))
+        {
+            std::cerr << "ERROR: ttc Histogram addition failed" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        if (!data_hist.Add(&const_hist_fakes, -1.))
+        {
+            std::cerr << "ERROR: Fakes Histogram addition failed" << std::endl;
+            return EXIT_FAILURE;
+        }
+        data_hist.Print(); // Should be equal to Data - (const_ttc + const_ttlight + const_fakes + const_other)
 
         // Combine ttbb and ttb histograms
+
+        std::cout << "Before adding ttb to ttbb" << std::endl;
         rew_hist = rew_hist_ttbb;
+        rew_hist.Print();
         rew_hist.Add(&rew_hist_ttb);
+        std::cout << "After adding ttb to ttbb" << std::endl;
+        rew_hist.Print();
+
+        // Normalize histograms
+        data_hist.Scale(1. / data_hist.Integral());
+        rew_hist.Scale(1. / rew_hist.Integral());
+        //rew_hist_ttbb.Scale(1. / rew_hist_ttbb.Integral());
+        //rew_hist_ttb.Scale(1. / rew_hist_ttb.Integral());
+        std::cout << "============================" << std::endl;
+        std::cout << "Histograms Normalised......." << std::endl;
+        std::cout << "============================" << std::endl;
+        rew_hist.Print();
+        data_hist.Print();
 
         // Compute ratio
         if (!data_hist.Divide(&rew_hist))
@@ -557,6 +605,15 @@ int main(int argc, char *argv[])
             std::cerr << "ERROR: Histogram division failed" << std::endl;
             return EXIT_FAILURE;
         }
+
+        // Print the computed ratio
+        std::cout << "Computed ratio....: ";
+        for (int i = 1; i <= n_bins; ++i)
+        {
+            float ratio = data_hist.GetBinContent(i);
+            std::cout << ratio << " ";
+        }
+        std::cout << std::endl;
 
         std::vector<float> factors;
         for (int i = 1; i <= n_bins; ++i)

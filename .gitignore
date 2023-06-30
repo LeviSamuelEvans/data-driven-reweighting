@@ -10,3 +10,4 @@ Condor/logs/*
 Condor/bashScripts/*
 Condor/Submit/*
 output/*/*.root
+Outputs_testing/*
