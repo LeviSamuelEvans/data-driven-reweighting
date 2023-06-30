@@ -61,7 +61,7 @@ This region is defined through the following selection :
 
 ###### For Single-lepton
 ```
-selection = (((L2_Class_tt1b_fraction >=0.19 && L2_Class_tt1b_fraction <= 0.32 && L2_Class_class == 1) || (L2_Class_tt2b_fraction >= 0.19 && L2_Class_tt2b_fraction <= 0.521 && L2_Class_class == 3) || (L2_Class_tt1B_fraction >= 0.19 && L2_Class_tt1B_fraction<=0.31 && L2_Class_class == 2)))
+selection = (((L2_Class_tt1b_fraction >=0.19 && L2_Class_tt1b_fraction <= 0.3549 && L2_Class_class == 1) || (L2_Class_tt2b_fraction >= 0.19 && L2_Class_tt2b_fraction <= 0.521 && L2_Class_class == 3) || (L2_Class_tt1B_fraction >= 0.19 && L2_Class_tt1B_fraction<=0.349 && L2_Class_class == 2)))
 ```
 
 ###### For Dilepton
@@ -94,7 +94,7 @@ The MC samples are first normalised to have the same total as data*, where data*
 
 In order to make sure there is a smooth transition between consecutive bins, a smooth function, $\mathcal{f}(HT)$, is chosen for the reweigthing, as opposed to constant factors in each bin.
 
-A piecewise function composed of $^{nd}$ order polynomials in each bin is used. This is also required to be continous and have a continous first order derivative. Requiring the piecewise function to be continuous and have a continuous first-order derivative ensures that the resulting smooth curve is well-behaved and does not have any abrupt changes or discontinuities that could introduce artifacts or biases into the reweighting, thus we ensure that the values of the function are smoothly connected across the bin boundaries, resulting in a smooth curve that accurately represents the underlying distribution.
+A piecewise function composed of $2^{nd}$ order polynomials in each bin is used. This is also required to be continous and have a continous first order derivative. Requiring the piecewise function to be continuous and have a continuous first-order derivative ensures that the resulting smooth curve is well-behaved and does not have any abrupt changes or discontinuities that could introduce artifacts or biases into the reweighting, thus we ensure that the values of the function are smoothly connected across the bin boundaries, resulting in a smooth curve that accurately represents the underlying distribution.
 
 This is given by :
 
@@ -117,10 +117,10 @@ Due to the known mismodelling of the flavour composition in the 4FS and 5FS sche
 
 | Flavour Components | Nominal K-factor |
 | ------          | ----- |
-| 1l : $tt +\geq2b$    | 0.95  |
-| 1l : $tt +\geq1c$    | 1.76  |
-| 1l : $tt + 1b/B$     | 1.11  |
-| 1l : $tt + light$    | 0.78  |
+| 1l : $tt +\geq2b$    | 0.96  |
+| 1l : $tt +\geq1c$    | 1.79  |
+| 1l : $tt + 1b/B$     | 1.08  |
+| 1l : $tt + light$    | 0.74  |
 | 2l : $tt +\geq2b$    | 0.93  | 
 | 2l : $tt +\geq1c$    | 1.59  |
 | 2l : $tt + 1b/B$     | 1.29  |
