@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
             std::vector<float> rew_weights = w.GetValue();
 
             /* Compute bins */
-            float min_n = 1000.f;
+            float min_n = 750.f;
             std::vector<size_t> idx(rew_var.size());
             std::iota(idx.begin(), idx.end(), 0);
             std::sort(idx.begin(), idx.end(), [&rew_var](size_t i1, size_t i2)
