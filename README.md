@@ -80,8 +80,8 @@ On top of the selection above, it should be noted the intial pre-selection for t
 ```
 The bins of the distribution in the newly defined orthogonal region used in the re-weighting procedure, that is performed bin-by-bin, are selected based on the following conditions :
 
-. each bin should contain at least  events
-. each bin should be at least  GeV wide
+- each bin should contain 750 events
+- each bin should be at least 40 GeV wide
 
 -----------------------------------
 
