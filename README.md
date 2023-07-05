@@ -115,16 +115,16 @@ This sets up a system of linear equations that is solved for $a_{i}$, $b_{i}$ an
 
 Due to the known mismodelling of the flavour composition in the 4FS and 5FS scheme tt samples, a scaling is applied to the ttc,ttb,ttB and ttbb samples. These scale factors are derived from a background-only fit to data, in which the relevant component normalisations are free-floated. These are outlined below.
 
-| Flavour Components | Nominal K-factor |
-| ------          | ----- |
-| 1l : $tt +\geq2b$    | 0.96  |
-| 1l : $tt +\geq1c$    | 1.79  |
-| 1l : $tt + 1b/B$     | 1.08  |
-| 1l : $tt + light$    | 0.74  |
-| 2l : $tt +\geq2b$    | 0.93  | 
-| 2l : $tt +\geq1c$    | 1.59  |
-| 2l : $tt + 1b/B$     | 1.29  |
-| 2l : $tt + light$    | 0.85  |
+| Flavour Components | Nominal K-factor | Uncertainty |
+| ------          | ----- | -----
+| 1l : $tt +\geq2b$    | 0.96  | +0.14<br>−0.12
+| 1l : $tt +\geq1c$    | 1.79  | +0.25<br>−0.23
+| 1l : $tt + 1b/B$     | 1.08  | +0.14<br>−0.13
+| 1l : $tt + light$    | 0.74  | +0.10<br>−0.10
+| 2l : $tt +\geq2b$    | 0.93  | +0.15<br>−0.13
+| 2l : $tt +\geq1c$    | 1.59  | +0.22<br>−0.20
+| 2l : $tt + 1b/B$     | 1.29  | +0.22<br>−0.20
+| 2l : $tt + light$    | 0.85  | +0.17<br>−0.15
 
 Note : Re-derive with fake factor fakes estimation
 
