@@ -66,11 +66,11 @@ int main(int argc, char *argv[])
     std::string reweight_var;                   // Variable to use for reweighting
     std::string ttbarReweight;                  // include reweighting prev. done for ttbar
     std::vector<std::string> channelNumbers;    // Channel numbers for which this reweighting is applied
+    std::string NormFactor_ttc;                 // Scaling applied to the ttc Sample
+    std::string NormFactor_ttb;                 // Scaling applied to the ttb/B Sample
+    std::string NormFactor_ttbb;                // Scaling applied to the ttbb Sample
+    std::string NormFactor_ttlight;             // Scaling applied to the ttlight Sample
     float min_bin_width;                        // Minimum width of histogram bins
-    float NormFactor_ttc;                       // Scaling applied to the ttc Sample
-    float NormFactor_ttb;                       // Scaling applied to the ttb/B Sample
-    float NormFactor_ttbb;                      // Scaling applied to the ttbb Sample
-    float NormFactor_ttlight;                   // Scaling applied to the ttlight Sample
 
 
 
@@ -81,31 +81,31 @@ int main(int argc, char *argv[])
         ("configFile,c", po::value(&configFile), "The name of the config file"); //
 
     po::options_description config("Configuration");
-    config.add_options()                                                                                                //
-        ("selection", po::value(&selection), "Event selection")                                                         //
-        ("basePath", po::value(&base_path), "Path to ntuples")                                                          //
-        ("reweightVar", po::value(&reweight_var), "Variable to reweight")                                               //
-        ("minBinWidth", po::value(&min_bin_width), "Minimum width of rew. bins")                                        //
-        ("reweightSample", po::value(&rew_samples)->multitoken(), "List of ttbb filenames to reweight.")                //
-        ("constSample", po::value(&const_samples)->multitoken(), "List of filenames not to be reweighted.")             //
-        ("ttlightSample", po::value(&ttlight_samples)->multitoken(), "List of ttlight filenames not to be reweighted.") //
-        ("ttcSample", po::value(&ttc_samples)->multitoken(), "List of ttc filenames not to be reweighted.")             //
-        ("fakesSample", po::value(&fakes_samples)->multitoken(), "List of fakes samples not to be reweighted.")         //
-        ("dataSample", po::value(&data_samples)->multitoken(), "List of filenames to use as data.")                     //
-        ("weight", po::value(&weight_expr), "MC weight expression")                                                     //
-        ("fakes_weight", po::value(&fakes_weight_expr), "Data driven fake estimation weights")                          //
-        ("outputFile", po::value(&output_file)->default_value("out.root"), "Output filename")                           //
-        ("ttbb_selection", po::value(&ttbb_selection), "tt+bb sample HF selection")                                     //
-        ("ttc_selection", po::value(&ttc_selection), "ttc HF selection")                                                //
-        ("ttlight_selection", po::value(&ttlight_selection), "ttlight HF selection")                                    //
-        ("ttbb_selection_comp", po::value(&ttbb_selection), "tt+bb HF selection components")                            //
-        ("ttb_selection_comp", po::value(&ttbb_selection), "tt+b/B HF selection components")                            //
-        ("ttbarReweight", po::value(&ttbarReweight), "including previous reweighting done for ttc/ttlight")             //
-        ("NormFactor_ttc", po::value(&NormFactor_ttc), "Scaling the ttc sample yield by the post-fit value")            //
-        ("NormFactor_ttb", po::value(&NormFactor_ttb), "Scaling the ttb sample yield by the post-fit value")            //
-        ("NormFactor_ttbb", po::value(&NormFactor_ttbb), "Scaling the ttbb sample yield by the post-fit value")         //
-        ("NormFactor_ttlight", po::value(&NormFactor_ttlight), "Scaling the ttlight sample yield by the post-fit value")   //
-        ("channelNumbers", po::value(&channelNumbers)->multitoken(), "MC_Channel_Number/DSID for the sample");          //
+    config.add_options()                                                                                                 //
+        ("selection", po::value(&selection), "Event selection")                                                          //
+        ("basePath", po::value(&base_path), "Path to ntuples")                                                           //
+        ("reweightVar", po::value(&reweight_var), "Variable to reweight")                                                //
+        ("minBinWidth", po::value(&min_bin_width), "Minimum width of rew. bins")                                         //
+        ("reweightSample", po::value(&rew_samples)->multitoken(), "List of ttbb filenames to reweight.")                 //
+        ("constSample", po::value(&const_samples)->multitoken(), "List of filenames not to be reweighted.")              //
+        ("ttlightSample", po::value(&ttlight_samples)->multitoken(), "List of ttlight filenames not to be reweighted.")  //
+        ("ttcSample", po::value(&ttc_samples)->multitoken(), "List of ttc filenames not to be reweighted.")              //
+        ("fakesSample", po::value(&fakes_samples)->multitoken(), "List of fakes samples not to be reweighted.")          //
+        ("dataSample", po::value(&data_samples)->multitoken(), "List of filenames to use as data.")                      //
+        ("weight", po::value(&weight_expr), "MC weight expression")                                                      //
+        ("fakes_weight", po::value(&fakes_weight_expr), "Data driven fake estimation weights")                           //
+        ("outputFile", po::value(&output_file)->default_value("out.root"), "Output filename")                            //
+        ("ttbb_selection", po::value(&ttbb_selection), "tt+bb sample HF selection")                                      //
+        ("ttc_selection", po::value(&ttc_selection), "ttc HF selection")                                                 //
+        ("ttlight_selection", po::value(&ttlight_selection), "ttlight HF selection")                                     //
+        ("ttbb_selection_comp", po::value(&ttbb_selection), "tt+bb HF selection components")                             //
+        ("ttb_selection_comp", po::value(&ttbb_selection), "tt+b/B HF selection components")                             //
+        ("ttbarReweight", po::value(&ttbarReweight), "including previous reweighting done for ttc/ttlight")              //
+        ("NormFactor_ttc", po::value(&NormFactor_ttc), "Scaling the ttc sample yield by the post-fit value")             //
+        ("NormFactor_ttb", po::value(&NormFactor_ttb), "Scaling the ttb sample yield by the post-fit value")             //
+        ("NormFactor_ttbb", po::value(&NormFactor_ttbb), "Scaling the ttbb sample yield by the post-fit value")          //
+        ("NormFactor_ttlight", po::value(&NormFactor_ttlight), "Scaling the ttlight sample yield by the post-fit value") //
+        ("channelNumbers", po::value(&channelNumbers)->multitoken(), "MC_Channel_Number/DSID for the sample");           //
 
     po::options_description cmdline_options;
     cmdline_options.add(commandline).add(config);
@@ -233,7 +233,7 @@ int main(int argc, char *argv[])
         int n_bins = bins.size() - 1;
 
         // Initialise histograms for computing reweighting factors
-        TH1D rew_hist_ttbb, rew_hist_ttb, rew_hist, const_hist_ttlight, const_hist_ttc, const_hist_fakes, const_hist, data_hist;
+        TH1D rew_hist_ttbb, rew_hist_ttb, rew_hist, const_hist_ttlight, const_hist_ttc, const_hist_fakes_ee, const_hist_fakes_mumu, const_hist, data_hist;
 
         // Integrals for reweighting interpolation
         std::vector<float> fdx(n_bins);
@@ -273,7 +273,7 @@ int main(int argc, char *argv[])
             df = df.Filter(cut + " && " + "HF_SimpleClassification == 1" +  " && " + "((HF_Classification >= 200 && HF_Classification < 1000) || (HF_Classification >= 1100))");
             std::cout << "Number of events passing tt+bb comp selection: " << df.Count().GetValue() << std::endl;
             df = df.Define("x", "(float)(" + reweight_var + ")");
-            df = df.Define("w", "(float)(" + weight_expr + " * " + std::to_string(NormFactor_ttbb) + ")");
+            df = df.Define("w", "(float)(" + weight_expr + " * " + NormFactor_ttbb + ")");
             df = df.Define("wx", "w * x");
             df = df.Define("wx2", "wx * x");
             auto hist_fdx = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w");
@@ -324,7 +324,7 @@ int main(int argc, char *argv[])
             df = df.Filter(cut + " && " + "HF_SimpleClassification == 1" + " && " + "((HF_Classification >= 100 && HF_Classification < 200) || (HF_Classification >= 1000 && HF_Classification < 1100))");
             std::cout << "Number of events passing tt+1b/B comp selection: " << df.Count().GetValue() << std::endl;
             df = df.Define("x", "(float)(" + reweight_var + ")");
-            df = df.Define("w", "(float)(" + weight_expr + " * " + std::to_string(NormFactor_ttb) + ")");
+            df = df.Define("w", "(float)(" + weight_expr + " * " + NormFactor_ttb + ")");
             std::cout << "Number of tt+1b/B events after RW + weight_expr + NF " << df.Count().GetValue() << std::endl;
             df = df.Define("wx", "w * x");
             df = df.Define("wx2", "wx * x");
@@ -390,7 +390,7 @@ int main(int argc, char *argv[])
             df = df.Filter(cut + " && " + "HF_SimpleClassification == 0");
             std::cout << "Number of ttlight events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Define("x", "(float)(" + reweight_var + ")");
-            df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + " * " + std::to_string(NormFactor_ttlight) + ")"); // add the ht_rew already derived and ttlight normalisation
+            df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + " * " + NormFactor_ttlight + ")"); // add the ht_rew already derived and ttlight normalisation
             std::cout << "Number of ttlight events after RW + weight_expr + NF " << df.Count().GetValue() << std::endl;
             const_hist_ttlight = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
             const_hist_ttlight.Print();
@@ -436,19 +436,25 @@ int main(int argc, char *argv[])
             df = df.Filter(cut + " && " + "HF_SimpleClassification == -1");
             std::cout << "Number of ttc events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Define("x", "(float)(" + reweight_var + ")");
-            df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + " * " + std::to_string(NormFactor_ttc) + ")"); // add the ht_rew already derived and ttc normalisation
+            df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + " * " + NormFactor_ttc + ")"); // add the ht_rew already derived and ttc normalisation
             std::cout << "Number of ttc events after RW + weight_expr + NF " << df.Count().GetValue() << std::endl;
             const_hist_ttc = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
             const_hist_ttc.Print();
         }
-        /*  ================
-            The fakes Sample
-            ================
-            - apply fakes weight
-            - DO NOT apply other weight string
+        /*  =================
+            The Fakes Samples
+            =================
+                - apply fakes weight
+                - DO NOT apply other weight string
+                - apply e/mu loose selection
 
         */
 
+                /*
+                    ===================
+                    The ee fakes sample
+                    ===================
+                */
         {
             TChain chain("nominal_Loose");
                 for (auto &r : region) // Loop over the regions defined in the header file
@@ -466,17 +472,54 @@ int main(int argc, char *argv[])
 
             /* Display progress */
             ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
-            ProgressBar pb(n_entries, "  Creating const. fake hist.");
+            ProgressBar pb(n_entries, "  Creating const. ee fake hist.");
             count_result.OnPartialResult(n_entries / 100, std::ref(pb));
             /* */
             if (!selection.empty())
                 df = df.Filter(selection);
 
-            df = df.Filter(cut);
+            df = df.Define("passCut", "Sum(el_isTight == 0)");
+            df = df.Filter(cut + " && " + "nElectrons == 1" + " &&" + "passCut");
             df = df.Define("x", "(float)(" + reweight_var + ")");
             df = df.Define("w", "(float)(" + fakes_weight_expr + ")");
-            const_hist_fakes = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
-            const_hist_fakes.Print();
+            const_hist_fakes_ee = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
+            const_hist_fakes_ee.Print();
+        }
+
+                /*
+                    =====================
+                    The mumu fakes sample
+                    =====================
+                */
+        {
+            TChain chain("nominal_Loose");
+                for (auto &r : region) // Loop over the regions defined in the header file
+                {
+                    for (auto &s : fakes_samples) // Loop over the new samples to be included
+                    {
+                    std::string path = base_path + "/" + r + "/" + s + ".root";
+
+                        chain.Add(path.c_str());
+                    }
+                }
+            int n_entries = chain.GetEntries();
+
+            ROOT::RDF::RNode df = ROOT::RDataFrame(chain);
+
+            /* Display progress */
+            ROOT::RDF::RResultPtr<ULong64_t> count_result = df.Count();
+            ProgressBar pb(n_entries, "  Creating const. mumu fake hist.");
+            count_result.OnPartialResult(n_entries / 100, std::ref(pb));
+            /* */
+            if (!selection.empty())
+                df = df.Filter(selection);
+
+            df = df.Define("passCut", "Sum(mu_isTight == 0)");
+            df = df.Filter(cut + " && " + "nMuons == 1" + " &&" + "passCut");
+            df = df.Define("x", "(float)(" + reweight_var + ")");
+            df = df.Define("w", "(float)(" + fakes_weight_expr + ")");
+            const_hist_fakes_mumu = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
+            const_hist_fakes_mumu.Print();
         }
         /*
             ========================
@@ -575,9 +618,14 @@ int main(int argc, char *argv[])
             return EXIT_FAILURE;
         }
 
-        if (!data_hist.Add(&const_hist_fakes, -1.))
+        if (!data_hist.Add(&const_hist_fakes_ee, -1.))
         {
-            std::cerr << "ERROR: Fakes Histogram addition failed" << std::endl;
+            std::cerr << "ERROR: ee Fakes Histogram addition failed" << std::endl;
+            return EXIT_FAILURE;
+        }
+        if (!data_hist.Add(&const_hist_fakes_mumu, -1.))
+        {
+            std::cerr << "ERROR: ee Fakes Histogram addition failed" << std::endl;
             return EXIT_FAILURE;
         }
         data_hist.Print(); // Should be equal to Data - (const_ttc + const_ttlight + const_fakes + const_other)
@@ -752,7 +800,7 @@ int main(int argc, char *argv[])
         std::vector<float> c(x.data() + 2 * n_bins, x.data() + 3 * n_bins);
 
         // Init string for bins
-        std::string bin_str = "(" + cut + ")" + " (mcChannelNumber == "+ chan_num + ")";
+        std::string bin_str = "(" + cut + ")" + " (mcChannelNumber == ";
         for (const std::string &chan_num : channelNumbers) {
             if (chan_num == channelNumbers.back()) {
                 bin_str += chan_num + "): " + std::to_string(bins[0] * 100);
