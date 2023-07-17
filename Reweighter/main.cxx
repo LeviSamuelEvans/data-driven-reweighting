@@ -70,7 +70,8 @@ int main(int argc, char *argv[])
     float NormFactor_ttc;                       // Scaling applied to the ttc Sample
     float NormFactor_ttb;                       // Scaling applied to the ttb/B Sample
     float NormFactor_ttbb;                      // Scaling applied to the ttbb Sample
-    
+    float NormFactor_ttlight;                   // Scaling applied to the ttlight Sample
+
 
 
 
@@ -103,7 +104,8 @@ int main(int argc, char *argv[])
         ("NormFactor_ttc", po::value(&NormFactor_ttc), "Scaling the ttc sample yield by the post-fit value")            //
         ("NormFactor_ttb", po::value(&NormFactor_ttb), "Scaling the ttb sample yield by the post-fit value")            //
         ("NormFactor_ttbb", po::value(&NormFactor_ttbb), "Scaling the ttbb sample yield by the post-fit value")         //
-        ("channelNumbers", po::value(&channelNumbers)->multitoken(), "MC_Channel_Number/DSID for the sample");          //                        //
+        ("NormFactor_ttlight", po::value(&NormFactor_ttlight), "Scaling the ttlight sample yield by the post-fit value")   //
+        ("channelNumbers", po::value(&channelNumbers)->multitoken(), "MC_Channel_Number/DSID for the sample");          //
 
     po::options_description cmdline_options;
     cmdline_options.add(commandline).add(config);
@@ -388,7 +390,7 @@ int main(int argc, char *argv[])
             df = df.Filter(cut + " && " + "HF_SimpleClassification == 0");
             std::cout << "Number of ttlight events passing selection: " << df.Count().GetValue() << std::endl;
             df = df.Define("x", "(float)(" + reweight_var + ")");
-            df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + ")"); // add the ht_rew already derived
+            df = df.Define("w", "(float)(" + weight_expr + " * " + ttbarReweight + " * " + std::to_string(NormFactor_ttlight) + ")"); // add the ht_rew already derived and ttlight normalisation
             std::cout << "Number of ttlight events after RW + weight_expr + NF " << df.Count().GetValue() << std::endl;
             const_hist_ttlight = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w").GetValue();
             const_hist_ttlight.Print();
@@ -749,8 +751,8 @@ int main(int argc, char *argv[])
         std::vector<float> b(x.data() + 1 * n_bins, x.data() + 2 * n_bins);
         std::vector<float> c(x.data() + 2 * n_bins, x.data() + 3 * n_bins);
 
-            // Init string for bins
-        std::string bin_str = "(" + cut + ")" + " (mcChannelNumber == ";
+        // Init string for bins
+        std::string bin_str = "(" + cut + ")" + " (mcChannelNumber == "+ chan_num + ")";
         for (const std::string &chan_num : channelNumbers) {
             if (chan_num == channelNumbers.back()) {
                 bin_str += chan_num + "): " + std::to_string(bins[0] * 100);
