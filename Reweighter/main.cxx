@@ -70,6 +70,7 @@ int main(int argc, char *argv[])
     float NormFactor_ttc;                       // Scaling applied to the ttc Sample
     float NormFactor_ttb;                       // Scaling applied to the ttb/B Sample
     float NormFactor_ttbb;                      // Scaling applied to the ttbb Sample
+    
 
 
 
