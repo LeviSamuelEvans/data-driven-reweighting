@@ -625,7 +625,7 @@ int main(int argc, char *argv[])
         }
         if (!data_hist.Add(&const_hist_fakes_mumu, -1.))
         {
-            std::cerr << "ERROR: ee Fakes Histogram addition failed" << std::endl;
+            std::cerr << "ERROR: mumu Fakes Histogram addition failed" << std::endl;
             return EXIT_FAILURE;
         }
         data_hist.Print(); // Should be equal to Data - (const_ttc + const_ttlight + const_fakes + const_other)
