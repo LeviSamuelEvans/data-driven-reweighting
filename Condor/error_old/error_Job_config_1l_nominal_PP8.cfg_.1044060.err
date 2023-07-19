@@ -1,0 +1,34 @@
+In module 'ROOTDataFrame':
+/cvmfs/atlas.cern.ch/repo/sw/software/22.2/AnalysisBaseExternals/22.2.60/InstallArea/x86_64-centos7-gcc11-opt/include/ROOT/RDF/InterfaceUtils.hxx:276:4: error: static_assert failed due to requirement 'std::is_convertible<ROOT::VecOps::RVec<int>, bool>::value' "filter expression returns a type that is not convertible to bool"
+   static_assert(std::is_convertible<FilterRet_t, bool>::value,
+   ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/cvmfs/atlas.cern.ch/repo/sw/software/22.2/AnalysisBaseExternals/22.2.60/InstallArea/x86_64-centos7-gcc11-opt/include/ROOT/RDF/InterfaceUtils.hxx:389:17: note: in instantiation of function template specialization 'ROOT::Internal::RDF::CheckFilter<__rdf::(lambda at input_line_71:2:17)>' requested here
+   RDFInternal::CheckFilter(f);
+                ^
+input_line_73:3:22: note: in instantiation of function template specialization 'ROOT::Internal::RDF::JitFilterHelper<__rdf::(lambda at input_line_71:2:17) &, ROOT::Detail::RDF::RNodeBase>' requested here
+ROOT::Internal::RDF::JitFilterHelper(__rdf::lambda19, new const char*[3]{"nJets", "nElectrons", "el_isTight"}, 3, "", reinterpret_cast<std::weak_ptr<ROOT::Detail::RDF::RJittedFilter>*>(0x7eb83f0), reinterpret_cast<std::shared_ptr<ROOT::Detail::RDF::RNodeBase>*>(0x34fadd0),reinterpret_cast<ROOT::Internal::RDF::RBookedDefines*>(0x701f130));
+                     ^
+In module 'ROOTDataFrame':
+/cvmfs/atlas.cern.ch/repo/sw/software/22.2/AnalysisBaseExternals/22.2.60/InstallArea/x86_64-centos7-gcc11-opt/include/ROOT/RDF/RFilter.hxx:108:14: error: no viable conversion from returned value of type 'ROOT::VecOps::RVec<int>' to function return type 'bool'
+      return fFilter(fValues[slot][S]->template Get<ColTypes>(entry)...);
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/cvmfs/atlas.cern.ch/repo/sw/software/22.2/AnalysisBaseExternals/22.2.60/InstallArea/x86_64-centos7-gcc11-opt/include/ROOT/RDF/RFilter.hxx:92:27: note: in instantiation of function template specialization 'ROOT::Detail::RDF::RFilter<__rdf::(lambda at input_line_71:2:17), ROOT::Detail::RDF::RNodeBase>::CheckFilterHelper<int, int, ROOT::VecOps::RVec<char> , 0, 1, 2>' requested here
+            auto passed = CheckFilterHelper(slot, entry, ColumnTypes_t{}, TypeInd_t{});
+                          ^
+/cvmfs/atlas.cern.ch/repo/sw/software/22.2/AnalysisBaseExternals/22.2.60/InstallArea/x86_64-centos7-gcc11-opt/include/ROOT/RDF/RFilter.hxx:67:4: note: in instantiation of member function 'ROOT::Detail::RDF::RFilter<__rdf::(lambda at input_line_71:2:17), ROOT::Detail::RDF::RNodeBase>::CheckFilters' requested here
+   RFilter(FilterF f, const ColumnNames_t &columns, std::shared_ptr<PrevDataFrame> pd,
+   ^
+/cvmfs/atlas.cern.ch/repo/sw/software/22.2/AnalysisBaseExternals/22.2.60/InstallArea/x86_64-centos7-gcc11-opt/include/ROOT/RDF/InterfaceUtils.hxx:398:40: note: in instantiation of member function 'ROOT::Detail::RDF::RFilter<__rdf::(lambda at input_line_71:2:17), ROOT::Detail::RDF::RNodeBase>::RFilter' requested here
+      std::unique_ptr<RFilterBase>(new F_t(std::forward<F>(f), cols, *prevNodeOnHeap, *defines, name)));
+                                       ^
+input_line_73:3:22: note: in instantiation of function template specialization 'ROOT::Internal::RDF::JitFilterHelper<__rdf::(lambda at input_line_71:2:17) &, ROOT::Detail::RDF::RNodeBase>' requested here
+ROOT::Internal::RDF::JitFilterHelper(__rdf::lambda19, new const char*[3]{"nJets", "nElectrons", "el_isTight"}, 3, "", reinterpret_cast<std::weak_ptr<ROOT::Detail::RDF::RJittedFilter>*>(0x7eb83f0), reinterpret_cast<std::shared_ptr<ROOT::Detail::RDF::RNodeBase>*>(0x34fadd0),reinterpret_cast<ROOT::Internal::RDF::RBookedDefines*>(0x701f130));
+                     ^
+/cvmfs/atlas.cern.ch/repo/sw/software/22.2/AnalysisBaseExternals/22.2.60/InstallArea/x86_64-centos7-gcc11-opt/include/ROOT/RVec.hxx:372:4: note: candidate template ignored: could not match 'RVec<type-parameter-0-0>' against 'bool'
+   operator RVec<U>() const
+   ^
+terminate called after throwing an instance of 'std::runtime_error'
+  what():  
+An error occurred during just-in-time compilation in RLoopManager::Run. The lines above might indicate the cause of the crash
+All RDF objects that have not run their event loop yet should be considered in an invalid state.
+

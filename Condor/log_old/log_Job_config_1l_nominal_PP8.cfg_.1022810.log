@@ -1,0 +1,29 @@
+000 (102281.000.000) 06/21 16:23:21 Job submitted from host: <10.141.225.107:9618?addrs=10.141.225.107-9618&noUDP&sock=1538_84bf_3>
+...
+033 (102281.000.000) 06/21 16:31:46 Changing job attribute JobPrio from 0 to 15
+...
+001 (102281.000.000) 06/21 21:54:36 Job executing on host: <10.141.0.204:9618?addrs=10.141.0.204-9618&alias=node204.cm.cluster&noUDP&sock=startd_3961_7eb9>
+...
+006 (102281.000.000) 06/21 21:54:44 Image size of job updated: 11828
+	2  -  MemoryUsage of job (MB)
+	1172  -  ResidentSetSize of job (KB)
+...
+006 (102281.000.000) 06/21 21:59:33 Image size of job updated: 753760
+	2  -  MemoryUsage of job (MB)
+	1172  -  ResidentSetSize of job (KB)
+...
+005 (102281.000.000) 06/21 21:59:33 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 0 00:01:14, Sys 0 00:00:06  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:01:14, Sys 0 00:00:06  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	246823  -  Run Bytes Sent By Job
+	184  -  Run Bytes Received By Job
+	246823  -  Total Bytes Sent By Job
+	184  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :      266 15728640  17631068 
+	   Memory (MB)          :        2     2048      2100 
+...

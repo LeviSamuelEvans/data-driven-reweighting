@@ -1,0 +1,65 @@
+[7mlsetup              [0m lsetup <tool1> [ <tool2> ...] (see lsetup -h):
+[7m lsetup asetup      [0m  (or asetup) to setup an Athena release
+[7m lsetup astyle      [0m  ATLAS style macros
+[7m lsetup atlantis    [0m  Atlantis: event display
+[7m lsetup eiclient    [0m  Event Index 
+[7m lsetup emi         [0m  EMI: grid middleware user interface 
+[7m lsetup ganga       [0m  Ganga: job definition and management client
+[7m lsetup lcgenv      [0m  lcgenv: setup tools from cvmfs SFT repository
+[7m lsetup panda       [0m  Panda: Production ANd Distributed Analysis
+[7m lsetup pyami       [0m  pyAMI: ATLAS Metadata Interface python client
+[7m lsetup root        [0m  ROOT data processing framework
+[7m lsetup rucio       [0m  distributed data management system client
+[7m lsetup scikit      [0m  python data analysis ecosystem
+[7m lsetup views       [0m  Set up a full LCG release
+[7m lsetup xcache      [0m  XRootD local proxy cache
+[7m lsetup xrootd      [0m  XRootD data access
+[7madvancedTools       [0m advanced tools menu
+[7mdiagnostics         [0m diagnostic tools menu
+[7mhelpMe              [0m more help
+[7mprintMenu           [0m show this menu
+[7mshowVersions        [0m show versions of installed software
+ 
+[1m[4m06 Mar 2023[0m 
+
+centos7: setupATLAS is python3 environment by default (same as setupATLAS -3).
+         If you need the previous python2 environment, do setupATLAS -2.
+ 	 We strongly encourage API users to migrate their scripts to python3.
+         [1m * * * This environment has been setup as python3. * * *[0m
+
+
+Using AnalysisBase/22.2.60 [cmake] with platform x86_64-centos7-gcc11-opt
+	at /cvmfs/atlas.cern.ch/repo/sw/software/22.2
+Unchanged: COOL_ORA_ENABLE_ADAPTIVE_OPT=Y
+-- Found AnalysisBase: /cvmfs/atlas.cern.ch/repo/sw/software/22.2/AnalysisBase/22.2.60/InstallArea/x86_64-centos7-gcc11-opt/cmake/AnalysisBaseConfig.cmake (version: 22.2.60)
+-- Found AnalysisBaseExternals: /cvmfs/atlas.cern.ch/repo/sw/software/22.2/AnalysisBaseExternals/22.2.60/InstallArea/x86_64-centos7-gcc11-opt/cmake/AnalysisBaseExternalsConfig.cmake (version: 22.2.60)
+-- Setting ATLAS specific build flags
+-- checker_gccplugins library not found
+-- Using the LCG modules without setting up a release
+-- Configuring ATLAS project with name "HTReweighter" and version "1.0.0"
+-- Using build type: RelWithDebInfo
+-- Using platform name: x86_64-centos7-gcc11-opt
+-- Cleaning stale files from build area
+-- Unit tests will be built by default
+-- Found 0 package(s)
+-- Number of packages configured: 0
+-- Time for package configuration: 0 second(s)
+-- Generated file: /scratch4/levans/data-driven-reweighting/build/x86_64-centos7-gcc11-opt/packages.txt
+-- Generated file: /scratch4/levans/data-driven-reweighting/build/x86_64-centos7-gcc11-opt/compilers.txt
+-- Generated file: /scratch4/levans/data-driven-reweighting/build/x86_64-centos7-gcc11-opt/ReleaseData
+-- Generating external environment configuration
+-- Writing runtime environment to file: /scratch4/levans/data-driven-reweighting/build/x86_64-centos7-gcc11-opt/env_setup.sh
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /scratch4/levans/data-driven-reweighting/build
+make: Entering directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+make[1]: Entering directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+make[2]: Entering directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+make[2]: Entering directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+make[2]: Leaving directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+Consolidate compiler generated dependencies of target reweight
+[  0%] Built target atlas_tests
+make[2]: Leaving directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+[100%] Built target reweight
+make[1]: Leaving directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+make: Leaving directory `/nfs/scratch4/levans/data-driven-reweighting/build'

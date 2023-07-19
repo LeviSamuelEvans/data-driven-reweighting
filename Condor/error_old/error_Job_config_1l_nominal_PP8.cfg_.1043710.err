@@ -1,0 +1,7 @@
+
+terminate called after throwing an instance of 'std::runtime_error'
+  what():  Failed to tokenize expression:
+nJets == 5 && Sum$(el_isTight==0&&nElectrons==1)==1 || Sum$(mu_isTight==0&&nMuons==1)==1
+
+Make sure it is valid C++.
+/home/pool/condor/dir_50867/condor_exec.exe: line 5: 97222 Aborted                 (core dumped) reweight --configFile /scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PP8.cfg

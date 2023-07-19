@@ -1,0 +1,118 @@
+[7mlsetup              [0m lsetup <tool1> [ <tool2> ...] (see lsetup -h):
+[7m lsetup asetup      [0m  (or asetup) to setup an Athena release
+[7m lsetup astyle      [0m  ATLAS style macros
+[7m lsetup atlantis    [0m  Atlantis: event display
+[7m lsetup eiclient    [0m  Event Index 
+[7m lsetup emi         [0m  EMI: grid middleware user interface 
+[7m lsetup ganga       [0m  Ganga: job definition and management client
+[7m lsetup lcgenv      [0m  lcgenv: setup tools from cvmfs SFT repository
+[7m lsetup panda       [0m  Panda: Production ANd Distributed Analysis
+[7m lsetup pyami       [0m  pyAMI: ATLAS Metadata Interface python client
+[7m lsetup root        [0m  ROOT data processing framework
+[7m lsetup rucio       [0m  distributed data management system client
+[7m lsetup scikit      [0m  python data analysis ecosystem
+[7m lsetup views       [0m  Set up a full LCG release
+[7m lsetup xcache      [0m  XRootD local proxy cache
+[7m lsetup xrootd      [0m  XRootD data access
+[7madvancedTools       [0m advanced tools menu
+[7mdiagnostics         [0m diagnostic tools menu
+[7mhelpMe              [0m more help
+[7mprintMenu           [0m show this menu
+[7mshowVersions        [0m show versions of installed software
+ 
+[1m[4m06 Mar 2023[0m 
+
+centos7: setupATLAS is python3 environment by default (same as setupATLAS -3).
+         If you need the previous python2 environment, do setupATLAS -2.
+ 	 We strongly encourage API users to migrate their scripts to python3.
+         [1m * * * This environment has been setup as python3. * * *[0m
+
+
+Using AnalysisBase/22.2.60 [cmake] with platform x86_64-centos7-gcc11-opt
+	at /cvmfs/atlas.cern.ch/repo/sw/software/22.2
+Unchanged: COOL_ORA_ENABLE_ADAPTIVE_OPT=Y
+-- Found AnalysisBase: /cvmfs/atlas.cern.ch/repo/sw/software/22.2/AnalysisBase/22.2.60/InstallArea/x86_64-centos7-gcc11-opt/cmake/AnalysisBaseConfig.cmake (version: 22.2.60)
+-- Found AnalysisBaseExternals: /cvmfs/atlas.cern.ch/repo/sw/software/22.2/AnalysisBaseExternals/22.2.60/InstallArea/x86_64-centos7-gcc11-opt/cmake/AnalysisBaseExternalsConfig.cmake (version: 22.2.60)
+-- Setting ATLAS specific build flags
+-- checker_gccplugins library not found
+-- Using the LCG modules without setting up a release
+-- Configuring ATLAS project with name "HTReweighter" and version "1.0.0"
+-- Using build type: RelWithDebInfo
+-- Using platform name: x86_64-centos7-gcc11-opt
+-- Cleaning stale files from build area
+-- Unit tests will be built by default
+-- Found 0 package(s)
+-- Number of packages configured: 0
+-- Time for package configuration: 0 second(s)
+-- Generated file: /scratch4/levans/data-driven-reweighting/build/x86_64-centos7-gcc11-opt/packages.txt
+-- Generated file: /scratch4/levans/data-driven-reweighting/build/x86_64-centos7-gcc11-opt/compilers.txt
+-- Generated file: /scratch4/levans/data-driven-reweighting/build/x86_64-centos7-gcc11-opt/ReleaseData
+-- Generating external environment configuration
+-- Writing runtime environment to file: /scratch4/levans/data-driven-reweighting/build/x86_64-centos7-gcc11-opt/env_setup.sh
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /scratch4/levans/data-driven-reweighting/build
+make: Entering directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+make[1]: Entering directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+make[2]: Entering directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+make[2]: Leaving directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+[  0%] Built target atlas_tests
+make[2]: Entering directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+Consolidate compiler generated dependencies of target reweight
+make[2]: Leaving directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+[100%] Built target reweight
+make[1]: Leaving directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+make: Leaving directory `/nfs/scratch4/levans/data-driven-reweighting/build'
+[1;32m===================================================================
+The Orthogonal Region being used for the derivation is defined by :
+====================================================================[0m
+==================================
+(((L2_Class_tt1b_fraction >=0.19 && L2_Class_tt1b_fraction <= 0.3549 && L2_Class_class == 1) || (L2_Class_tt2b_fraction >= 0.19 && L2_Class_tt2b_fraction <= 0.521 && L2_Class_class == 3) || (L2_Class_tt1B_fraction >= 0.19 && L2_Class_tt1B_fraction<=0.349 && L2_Class_class == 2)))
+==================================
+[1;32m==================================
+The samples used for defining bins
+==================================[0m
+/juicefs/data/levans/L2_ttHbb_Production_212238_v2/1l/5j3b_ttbb/ttbb_PP8_mc16a.root
+/juicefs/data/levans/L2_ttHbb_Production_212238_v2/1l/5j3b_ttbb/ttbb_PP8_mc16d.root
+/juicefs/data/levans/L2_ttHbb_Production_212238_v2/1l/5j3b_ttbb/ttbb_PP8_mc16e.root
+/juicefs/data/levans/L2_ttHbb_Production_212238_v2/1l/5j3b_ttb/ttbb_PP8_mc16a.root
+/juicefs/data/levans/L2_ttHbb_Production_212238_v2/1l/5j3b_ttb/ttbb_PP8_mc16d.root
+/juicefs/data/levans/L2_ttHbb_Production_212238_v2/1l/5j3b_ttb/ttbb_PP8_mc16e.root
+/juicefs/data/levans/L2_ttHbb_Production_212238_v2/1l/5j3b_ttB/ttbb_PP8_mc16a.root
+/juicefs/data/levans/L2_ttHbb_Production_212238_v2/1l/5j3b_ttB/ttbb_PP8_mc16d.root
+/juicefs/data/levans/L2_ttHbb_Production_212238_v2/1l/5j3b_ttB/ttbb_PP8_mc16e.root
+1303187
+[1;32m=======================
+Computing the bins....
+=======================[0m
+Number of events in ttbb sample before deriv. region: 1303187
+Number of events in ttbb sample after deriv. region: 533282
+Number of events passing HF (1) selection: 173424
+Number of events in ttbb sample before deriv. region: 1303187
+Number of events in ttbb sample after deriv. region: 533282
+Number of events passing HF (1) selection: 165854
+Number of events in ttbb sample before deriv. region: 1303187
+Number of events in ttbb sample after deriv. region: 533282
+Number of events passing HF (1) selection: 104536
+Number of events in ttbb sample before deriv. region: 1303187
+Number of events in ttbb sample after deriv. region: 533282
+Number of events passing HF (1) selection: 83431
+
+Processing nJets == 5:
+Number of events passing tt+bb comp selection: 67676
+TH1.Print Name  = , Entries= 67676, Total sum= 1991.37
+Number of events passing tt+1b/B comp selection: 105748
+Number of tt+1b/B events after RW + weight_expr + NF 105748
+TH1.Print Name  = , Entries= 105748, Total sum= 3251.69
+Number of ttbar events before selection: 416721
+Number of ttbar events passing selection: 189944
+Number of ttlight events passing selection: 11328
+Number of ttlight events after RW + weight_expr + NF 11328
+TH1.Print Name  = , Entries= 11328, Total sum= 1135.01
+Number of ttbar events before selection: 416721
+Number of ttbar events passing selection: 189944
+Number of ttc events passing selection: 9212
+Number of ttc events after RW + weight_expr + NF 9212
+TH1.Print Name  = , Entries= 9212, Total sum= 2197.7
+  Creating const. fake hist. [                                        ] 1%  Creating const. fake hist. [#                                       ] 2%  Creating const. fake hist. [#                                       ] 3%  Creating const. fake hist. [##                                      ] 4%  Creating const. fake hist. [##                                      ] 5%  Creating const. fake hist. [##                                      ] 6%  Creating const. fake hist. [###                                     ] 7%  Creating const. fake hist. [###                                     ] 8%  Creating const. fake hist. [####                                    ] 9%  Creating const. fake hist. [####                                    ] 10%  Creating const. fake hist. [####                                    ] 11%  Creating const. fake hist. [#####                                   ] 12%  Creating const. fake hist. [#####                                   ] 13%  Creating const. fake hist. [######                                  ] 14%  Creating const. fake hist. [######                                  ] 15%  Creating const. fake hist. [######                                  ] 16%  Creating const. fake hist. [#######                                 ] 17%  Creating const. fake hist. [#######                                 ] 18%  Creating const. fake hist. [########                                ] 19%  Creating const. fake hist. [########                                ] 20%  Creating const. fake hist. [########                                ] 21%  Creating const. fake hist. [#########                               ] 22%  Creating const. fake hist. [#########                               ] 23%  Creating const. fake hist. [##########                              ] 24%  Creating const. fake hist. [##########                              ] 25%  Creating const. fake hist. [##########                              ] 26%  Creating const. fake hist. [###########                             ] 27%  Creating const. fake hist. [###########                             ] 28%  Creating const. fake hist. [############                            ] 29%  Creating const. fake hist. [############                            ] 30%  Creating const. fake hist. [############                            ] 31%  Creating const. fake hist. [#############                           ] 32%  Creating const. fake hist. [#############                           ] 33%  Creating const. fake hist. [##############                          ] 34%  Creating const. fake hist. [##############                          ] 35%  Creating const. fake hist. [##############                          ] 36%  Creating const. fake hist. [###############                         ] 37%  Creating const. fake hist. [###############                         ] 38%  Creating const. fake hist. [################                        ] 39%  Creating const. fake hist. [################                        ] 40%  Creating const. fake hist. [################                        ] 41%  Creating const. fake hist. [#################                       ] 42%  Creating const. fake hist. [#################                       ] 43%  Creating const. fake hist. [##################                      ] 44%  Creating const. fake hist. [##################                      ] 45%  Creating const. fake hist. [##################                      ] 46%  Creating const. fake hist. [###################                     ] 47%  Creating const. fake hist. [###################                     ] 48%  Creating const. fake hist. [####################                    ] 49%  Creating const. fake hist. [####################                    ] 50%  Creating const. fake hist. [####################                    ] 51%  Creating const. fake hist. [#####################                   ] 52%  Creating const. fake hist. [#####################                   ] 53%  Creating const. fake hist. [######################                  ] 54%  Creating const. fake hist. [######################                  ] 55%  Creating const. fake hist. [######################                  ] 56%  Creating const. fake hist. [#######################                 ] 57%  Creating const. fake hist. [#######################                 ] 58%  Creating const. fake hist. [########################                ] 59%  Creating const. fake hist. [########################                ] 60%  Creating const. fake hist. [########################                ] 61%  Creating const. fake hist. [#########################               ] 62%  Creating const. fake hist. [#########################               ] 63%  Creating const. fake hist. [##########################              ] 64%  Creating const. fake hist. [##########################              ] 65%  Creating const. fake hist. [##########################              ] 66%  Creating const. fake hist. [###########################             ] 67%  Creating const. fake hist. [###########################             ] 68%  Creating const. fake hist. [############################            ] 69%  Creating const. fake hist. [############################            ] 70%  Creating const. fake hist. [############################            ] 71%  Creating const. fake hist. [#############################           ] 72%  Creating const. fake hist. [#############################           ] 73%  Creating const. fake hist. [##############################          ] 74%  Creating const. fake hist. [##############################          ] 75%  Creating const. fake hist. [##############################          ] 76%  Creating const. fake hist. [###############################         ] 77%  Creating const. fake hist. [###############################         ] 78%  Creating const. fake hist. [################################        ] 79%  Creating const. fake hist. [################################        ] 80%  Creating const. fake hist. [################################        ] 81%  Creating const. fake hist. [#################################       ] 82%  Creating const. fake hist. [#################################       ] 83%  Creating const. fake hist. [##################################      ] 84%  Creating const. fake hist. [##################################      ] 85%  Creating const. fake hist. [##################################      ] 86%  Creating const. fake hist. [###################################     ] 87%  Creating const. fake hist. [###################################     ] 88%  Creating const. fake hist. [####################################    ] 89%  Creating const. fake hist. [####################################    ] 90%  Creating const. fake hist. [####################################    ] 91%  Creating const. fake hist. [#####################################   ] 92%  Creating const. fake hist. [#####################################   ] 93%  Creating const. fake hist. [######################################  ] 94%  Creating const. fake hist. [######################################  ] 95%  Creating const. fake hist. [######################################  ] 96%  Creating const. fake hist. [####################################### ] 97%  Creating const. fake hist. [####################################### ] 98%  Creating const. fake hist. [########################################] 99%  Creating const. fake hist. [########################################] 100%TH1.Print Name  = , Entries= 264251, Total sum= 986.41
+  Creating const. fake hist. [########################################] 100%

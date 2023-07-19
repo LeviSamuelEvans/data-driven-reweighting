@@ -1,0 +1,3 @@
+terminate called after throwing an instance of 'boost::wrapexcept<boost::program_options::invalid_config_file_syntax>'
+  what():  the options configuration file contains an invalid line 'NormFactor_ttlight'
+/home/pool/condor/dir_280571/condor_exec.exe: line 5: 282898 Aborted                 (core dumped) reweight --configFile /scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PP8.cfg
