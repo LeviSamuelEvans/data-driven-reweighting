@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     std::vector<std::string> fakes_samples;     // Fakes samples (filenames)
     std::vector<std::string> data_samples;      // Data samples (filenames)
     std::string output_file;                    // Output filename
+    std::vector<std::string> channel_numbers;   // DSID numbers for reweighted samples
     std::string selection;                      // Orthogonal Region Selection
     std::string ttbb_selection;                 // ttbb HF selection
     std::string ttc_selection;                  // ttc HF selection
@@ -86,6 +87,7 @@ int main(int argc, char *argv[])
         ("basePath", po::value(&base_path), "Path to ntuples")                                                           //
         ("reweightVar", po::value(&reweight_var), "Variable to reweight")                                                //
         ("minBinWidth", po::value(&min_bin_width), "Minimum width of rew. bins")                                         //
+        ("mcChannelNumbers", po::value(&channel_numbers)->multitoken(), "DSID numbers for reweighted samples")           //
         ("reweightSample", po::value(&rew_samples)->multitoken(), "List of ttbb filenames to reweight.")                 //
         ("constSample", po::value(&const_samples)->multitoken(), "List of filenames not to be reweighted.")              //
         ("ttlightSample", po::value(&ttlight_samples)->multitoken(), "List of ttlight filenames not to be reweighted.")  //
@@ -194,7 +196,7 @@ int main(int argc, char *argv[])
             std::vector<float> rew_weights = w.GetValue();
 
             /* Compute bins */
-            float min_n = 750.f;
+            float min_n = 500.f;
             std::vector<size_t> idx(rew_var.size());
             std::iota(idx.begin(), idx.end(), 0);
             std::sort(idx.begin(), idx.end(), [&rew_var](size_t i1, size_t i2)
