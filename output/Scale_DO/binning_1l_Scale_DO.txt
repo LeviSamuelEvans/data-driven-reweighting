@@ -1,0 +1,4 @@
+(nJets == 5) (mcChannelNumber == 3359.850342, 
+(nJets == 6) (mcChannelNumber == 3636.536865, 
+(nJets == 7) (mcChannelNumber == 3890.527344, 
+(nJets >= 8) (mcChannelNumber == 4158.635254, 

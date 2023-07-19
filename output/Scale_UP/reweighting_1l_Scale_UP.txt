@@ -1,0 +1,12 @@
+selection: (nJets == 5) && () && (HT_all * 1.e-5) >= 1.760813 && (HT_all * 1.e-5) < 33.598503
+factor: -nan * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -nan * (HT_all * 1.e-5) + -nan
+
+selection: (nJets == 6) && () && (HT_all * 1.e-5) >= 2.064525 && (HT_all * 1.e-5) < 36.365368
+factor: -nan * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -nan * (HT_all * 1.e-5) + -nan
+
+selection: (nJets == 7) && () && (HT_all * 1.e-5) >= 2.450175 && (HT_all * 1.e-5) < 38.905273
+factor: -nan * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -nan * (HT_all * 1.e-5) + -nan
+
+selection: (nJets >= 8) && () && (HT_all * 1.e-5) >= 2.888608 && (HT_all * 1.e-5) < 41.586353
+factor: -nan * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -nan * (HT_all * 1.e-5) + -nan
+

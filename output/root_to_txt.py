@@ -1,7 +1,10 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 
 # Originally written by Alex Froch for ttc & ttlight reweighting
 
+#
+# ./root_to_txt.py -c 1l
+#
 from ROOT import TFile
 
 import os
@@ -41,13 +44,17 @@ if __name__ == "__main__":
 
     if args.variation is None:
         variation_list = [
-            "fsr_down",
-            "fsr_up",
-            "muR05_muF05",
-            "muR20_muF20",
+            "FSR_UP",
+            "FSR_DO",
+            "Scale_UP",
+            "Scale_DO",
             "nominal",
-            "var3c_down",
-            "var3c_up",
+            "nominal_AFII",
+            "ISR_DO",
+            "ISR_DO",
+            "ptHard1",
+            "DipolePS",
+            "bzd2_AFII",
         ]
     else:
         variation_list = [args.variation]

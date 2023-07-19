@@ -106,8 +106,7 @@ int main(int argc, char *argv[])
         ("NormFactor_ttc", po::value(&NormFactor_ttc), "Scaling the ttc sample yield by the post-fit value")             //
         ("NormFactor_ttb", po::value(&NormFactor_ttb), "Scaling the ttb sample yield by the post-fit value")             //
         ("NormFactor_ttbb", po::value(&NormFactor_ttbb), "Scaling the ttbb sample yield by the post-fit value")          //
-        ("NormFactor_ttlight", po::value(&NormFactor_ttlight), "Scaling the ttlight sample yield by the post-fit value") //
-        ("channelNumbers", po::value(&channelNumbers)->multitoken(), "MC_Channel_Number/DSID for the sample");           //
+        ("NormFactor_ttlight", po::value(&NormFactor_ttlight), "Scaling the ttlight sample yield by the post-fit value"); //
 
     po::options_description cmdline_options;
     cmdline_options.add(commandline).add(config);

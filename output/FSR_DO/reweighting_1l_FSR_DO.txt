@@ -1,0 +1,87 @@
+selection: (nJets == 5) && () && (HT_all * 1.e-5) >= 1.760813 && (HT_all * 1.e-5) < 3.192615
+factor: 8.6265409e-17 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -0.13452055 * (HT_all * 1.e-5) + 1.4951433
+
+selection: (nJets == 5) && () && (HT_all * 1.e-5) >= 3.192615 && (HT_all * 1.e-5) < 3.619139
+factor: -0.45241061 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + 2.754225 * (HT_all * 1.e-5) + -3.1161826
+
+selection: (nJets == 5) && () && (HT_all * 1.e-5) >= 3.619139 && (HT_all * 1.e-5) < 3.991274
+factor: 1.6606511 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -12.540705 * (HT_all * 1.e-5) + 24.56106
+
+selection: (nJets == 5) && () && (HT_all * 1.e-5) >= 3.991274 && (HT_all * 1.e-5) < 4.407522
+factor: -1.3821558 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + 11.748648 * (HT_all * 1.e-5) + -23.911673
+
+selection: (nJets == 5) && () && (HT_all * 1.e-5) >= 4.407522 && (HT_all * 1.e-5) < 4.954746
+factor: 0.41983187 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -4.1359515 * (HT_all * 1.e-5) + 11.094184
+
+selection: (nJets == 5) && () && (HT_all * 1.e-5) >= 4.954746 && (HT_all * 1.e-5) < 5.770156
+factor: 0.094851449 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -0.91556042 * (HT_all * 1.e-5) + 3.1160736
+
+selection: (nJets == 5) && () && (HT_all * 1.e-5) >= 5.770156 && (HT_all * 1.e-5) < 8.598466
+factor: -0.049581181 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + 0.75123727 * (HT_all * 1.e-5) + -1.692768
+
+selection: (nJets == 5) && () && (HT_all * 1.e-5) >= 8.598466 && (HT_all * 1.e-5) < 33.598503
+factor: -1.3878097e-17 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -0.10140689 * (HT_all * 1.e-5) + 1.972948
+
+selection: (nJets == 6) && () && (HT_all * 1.e-5) >= 2.064525 && (HT_all * 1.e-5) < 3.635813
+factor: -8.6219027e-17 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -0.26806474 * (HT_all * 1.e-5) + 1.9347434
+
+selection: (nJets == 6) && () && (HT_all * 1.e-5) >= 3.635813 && (HT_all * 1.e-5) < 4.081763
+factor: 0.86326998 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -6.5454416 * (HT_all * 1.e-5) + 13.346428
+
+selection: (nJets == 6) && () && (HT_all * 1.e-5) >= 4.081763 && (HT_all * 1.e-5) < 4.481560
+factor: -0.78704536 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + 6.9269519 * (HT_all * 1.e-5) + -14.149132
+
+selection: (nJets == 6) && () && (HT_all * 1.e-5) >= 4.481560 && (HT_all * 1.e-5) < 4.907551
+factor: -0.43100697 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + 3.7357366 * (HT_all * 1.e-5) + -6.9983206
+
+selection: (nJets == 6) && () && (HT_all * 1.e-5) >= 4.907551 && (HT_all * 1.e-5) < 5.422943
+factor: 0.66366583 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -7.0085893 * (HT_all * 1.e-5) + 19.365845
+
+selection: (nJets == 6) && () && (HT_all * 1.e-5) >= 5.422943 && (HT_all * 1.e-5) < 6.119099
+factor: 0.039227035 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -0.23599777 * (HT_all * 1.e-5) + 1.0021572
+
+selection: (nJets == 6) && () && (HT_all * 1.e-5) >= 6.119099 && (HT_all * 1.e-5) < 7.317746
+factor: -0.1532788 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + 2.1199267 * (HT_all * 1.e-5) + -6.2059097
+
+selection: (nJets == 6) && () && (HT_all * 1.e-5) >= 7.317746 && (HT_all * 1.e-5) < 13.669742
+factor: 0.012868343 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -0.31171846 * (HT_all * 1.e-5) + 2.6911705
+
+selection: (nJets == 6) && () && (HT_all * 1.e-5) >= 13.669742 && (HT_all * 1.e-5) < 36.365368
+factor: 6.2160414e-18 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + 0.040095396 * (HT_all * 1.e-5) + 0.28656811
+
+selection: (nJets == 7) && () && (HT_all * 1.e-5) >= 2.450175 && (HT_all * 1.e-5) < 4.461801
+factor: 3.4306574e-18 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + 0.12557933 * (HT_all * 1.e-5) + 0.46653014
+
+selection: (nJets == 7) && () && (HT_all * 1.e-5) >= 4.461801 && (HT_all * 1.e-5) < 5.156847
+factor: -0.11443266 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + 1.1467308 * (HT_all * 1.e-5) + -1.8115572
+
+selection: (nJets == 7) && () && (HT_all * 1.e-5) >= 5.156847 && (HT_all * 1.e-5) < 5.935847
+factor: 0.040734567 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -0.45361644 * (HT_all * 1.e-5) + 2.3148158
+
+selection: (nJets == 7) && () && (HT_all * 1.e-5) >= 5.935847 && (HT_all * 1.e-5) < 6.963887
+factor: -0.10134847 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + 1.2331499 * (HT_all * 1.e-5) + -2.6913776
+
+selection: (nJets == 7) && () && (HT_all * 1.e-5) >= 6.963887 && (HT_all * 1.e-5) < 9.043434
+factor: 0.058587041 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -0.99439573 * (HT_all * 1.e-5) + 5.0648098
+
+selection: (nJets == 7) && () && (HT_all * 1.e-5) >= 9.043434 && (HT_all * 1.e-5) < 38.905273
+factor: -2.943217e-18 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + 0.065260358 * (HT_all * 1.e-5) + 0.27334467
+
+selection: (nJets >= 8) && () && (HT_all * 1.e-5) >= 2.888608 && (HT_all * 1.e-5) < 5.701226
+factor: 5.7595223e-17 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -0.28367558 * (HT_all * 1.e-5) + 2.8293462
+
+selection: (nJets >= 8) && () && (HT_all * 1.e-5) >= 5.701226 && (HT_all * 1.e-5) < 6.869667
+factor: 0.020847632 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -0.52138972 * (HT_all * 1.e-5) + 3.5069773
+
+selection: (nJets >= 8) && () && (HT_all * 1.e-5) >= 6.869667 && (HT_all * 1.e-5) < 8.183204
+factor: 0.19949938 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -2.9759459 * (HT_all * 1.e-5) + 11.937969
+
+selection: (nJets >= 8) && () && (HT_all * 1.e-5) >= 8.183204 && (HT_all * 1.e-5) < 9.944877
+factor: -0.15320329 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + 2.7965298 * (HT_all * 1.e-5) + -11.680704
+
+selection: (nJets >= 8) && () && (HT_all * 1.e-5) >= 9.944877 && (HT_all * 1.e-5) < 15.011560
+factor: 0.031687796 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + -0.88090825 * (HT_all * 1.e-5) + 6.6051297
+
+selection: (nJets >= 8) && () && (HT_all * 1.e-5) >= 15.011560 && (HT_all * 1.e-5) < 41.586353
+factor: -4.1360271e-18 * (HT_all * 1.e-5) * (HT_all * 1.e-5) + 0.070458241 * (HT_all * 1.e-5) + -0.53561777
+
