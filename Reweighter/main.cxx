@@ -50,8 +50,8 @@ int main(int argc, char *argv[])
     std::string base_path;                      // Path to sample files
     std::vector<std::string> rew_samples;       // Samples to reweight (filenames)
     std::vector<std::string> const_samples;     // Samples to keep constant (filenames)
-    std::vector<std::string> ttlight_samples;   // ttlight samples also to be kept constant but convininent for splitting (filenames))
-    std::vector<std::string> ttc_samples;       // ttc samples also to be kept constant but convininent for splitting (filenames)
+    std::vector<std::string> ttlight_samples;   // ttlight samples, also to be kept constant but convininent for splitting (filenames))
+    std::vector<std::string> ttc_samples;       // ttc samples, also to be kept constant but convininent for splitting (filenames)
     std::vector<std::string> fakes_samples;     // Fakes samples (filenames)
     std::vector<std::string> data_samples;      // Data samples (filenames)
     std::string output_file;                    // Output filename
@@ -63,10 +63,10 @@ int main(int argc, char *argv[])
     std::string ttbb_selection_comp;            // tt+bb HF selection components
     std::string ttb_selection_comp;             // tt+b/B HF selection components
     std::string weight_expr;                    // Weight expression
+    std::string weight_expr_ttb;                // Weight expression used for the ttb scale variations, since these have separate weight string to ttbar samp
     std::string fakes_weight_expr;              // Fakes weight expression
     std::string reweight_var;                   // Variable to use for reweighting
     std::string ttbarReweight;                  // include reweighting prev. done for ttbar
-    std::vector<std::string> channelNumbers;    // Channel numbers for which this reweighting is applied
     std::string NormFactor_ttc;                 // Scaling applied to the ttc Sample
     std::string NormFactor_ttb;                 // Scaling applied to the ttb/B Sample
     std::string NormFactor_ttbb;                // Scaling applied to the ttbb Sample
@@ -95,13 +95,14 @@ int main(int argc, char *argv[])
         ("fakesSample", po::value(&fakes_samples)->multitoken(), "List of fakes samples not to be reweighted.")          //
         ("dataSample", po::value(&data_samples)->multitoken(), "List of filenames to use as data.")                      //
         ("weight", po::value(&weight_expr), "MC weight expression")                                                      //
+        ("weight_ttb", po::value(&weight_expr_ttb), "MC weight expression for ttb scales")                               //
         ("fakes_weight", po::value(&fakes_weight_expr), "Data driven fake estimation weights")                           //
         ("outputFile", po::value(&output_file)->default_value("out.root"), "Output filename")                            //
         ("ttbb_selection", po::value(&ttbb_selection), "tt+bb sample HF selection")                                      //
         ("ttc_selection", po::value(&ttc_selection), "ttc HF selection")                                                 //
         ("ttlight_selection", po::value(&ttlight_selection), "ttlight HF selection")                                     //
-        ("ttbb_selection_comp", po::value(&ttbb_selection), "tt+bb HF selection components")                             //
-        ("ttb_selection_comp", po::value(&ttbb_selection), "tt+b/B HF selection components")                             //
+        ("ttbb_selection_comp", po::value(&ttbb_selection_comp), "tt+bb HF selection components")                        //
+        ("ttb_selection_comp", po::value(&ttb_selection_comp), "tt+b/B HF selection components")                             //
         ("ttbarReweight", po::value(&ttbarReweight), "including previous reweighting done for ttc/ttlight")              //
         ("NormFactor_ttc", po::value(&NormFactor_ttc), "Scaling the ttc sample yield by the post-fit value")             //
         ("NormFactor_ttb", po::value(&NormFactor_ttb), "Scaling the ttb sample yield by the post-fit value")             //
@@ -179,12 +180,11 @@ int main(int argc, char *argv[])
             if (!selection.empty())
                 df = df.Filter(selection);
             std::cout << "Number of events in ttbb sample after deriv. region: " << df.Count().GetValue() << std::endl;
-            if (!ttbb_selection.empty())
-                df = df.Filter(ttbb_selection);
             // check our selection is working as intended
             df = df.Filter(cut + " && " + "HF_SimpleClassification == 1");
             df = df.Define("x", "(float)(" + reweight_var + ")");
-            df = df.Define("w", "(float)(" + weight_expr + ")");
+            // special weight selection in the case we are reweigthing ttb scale variations
+            df = df.Define("w", "(float)(" + (weight_expr_ttb.empty() ? weight_expr : weight_expr_ttb) + ")");
             std::cout << "Number of events passing HF (1) selection: " << df.Count().GetValue() << std::endl;
             auto n = df.Take<int>("nJets");
             auto v = df.Take<float>("x");
@@ -241,7 +241,7 @@ int main(int argc, char *argv[])
         std::vector<float> fxdx(n_bins);
         std::vector<float> fx2dx(n_bins);
 
-        /* Get rew. histogram for ttbb and integrals*/
+        /* Get rew. histogram for tt+bb and integrals*/
         {
         TChain chain("nominal_Loose");
         for (auto &r : region) // Loop over the regions defined in the header file
@@ -274,7 +274,9 @@ int main(int argc, char *argv[])
             df = df.Filter(cut + " && " + "HF_SimpleClassification == 1" +  " && " + "((HF_Classification >= 200 && HF_Classification < 1000) || (HF_Classification >= 1100))");
             std::cout << "Number of events passing tt+bb comp selection: " << df.Count().GetValue() << std::endl;
             df = df.Define("x", "(float)(" + reweight_var + ")");
-            df = df.Define("w", "(float)(" + weight_expr + " * " + NormFactor_ttbb + ")");
+            // special weight selection in the case we are reweigthing ttb scale variations
+            df = df.Define("w", "(float)(" + (weight_expr_ttb.empty() ? weight_expr : weight_expr_ttb) + " * " + NormFactor_ttbb + ")");
+            // df = df.Define("w", "(float)(" + weight_expr + " * " + NormFactor_ttbb + ")"); // old for posterity
             df = df.Define("wx", "w * x");
             df = df.Define("wx2", "wx * x");
             auto hist_fdx = df.Histo1D<float>({"", "", n_bins, bins.data()}, "x", "w");
@@ -325,7 +327,8 @@ int main(int argc, char *argv[])
             df = df.Filter(cut + " && " + "HF_SimpleClassification == 1" + " && " + "((HF_Classification >= 100 && HF_Classification < 200) || (HF_Classification >= 1000 && HF_Classification < 1100))");
             std::cout << "Number of events passing tt+1b/B comp selection: " << df.Count().GetValue() << std::endl;
             df = df.Define("x", "(float)(" + reweight_var + ")");
-            df = df.Define("w", "(float)(" + weight_expr + " * " + NormFactor_ttb + ")");
+            df = df.Define("w", "(float)(" + (weight_expr_ttb.empty() ? weight_expr : weight_expr_ttb) + " * " + NormFactor_ttbb + ")");
+            //df = df.Define("w", "(float)(" + weight_expr + " * " + NormFactor_ttb + ")");
             std::cout << "Number of tt+1b/B events after RW + weight_expr + NF " << df.Count().GetValue() << std::endl;
             df = df.Define("wx", "w * x");
             df = df.Define("wx2", "wx * x");
@@ -802,8 +805,8 @@ int main(int argc, char *argv[])
 
         // Init string for bins
         std::string bin_str = "(" + cut + ")" + " (mcChannelNumber == ";
-        for (const std::string &chan_num : channelNumbers) {
-            if (chan_num == channelNumbers.back()) {
+        for (const std::string &chan_num : channel_numbers) {
+            if (chan_num == channel_numbers.back()) {
                 bin_str += chan_num + "): " + std::to_string(bins[0] * 100);
             } else {
                 bin_str += chan_num + ", ";
@@ -814,8 +817,8 @@ int main(int argc, char *argv[])
         for (int i = 0; i < n_bins; ++i)
         {
             std::string sel = "(" + cut + ") && (";
-            for (const std::string &chan_num : channelNumbers) {
-                if (chan_num == channelNumbers.back()) {
+            for (const std::string &chan_num : channel_numbers) {
+                if (chan_num == channel_numbers.back()) {
                     sel += "(mcChannelNumber == " + chan_num + ")";
                 } else {
                     sel += "(mcChannelNumber == " + chan_num + ") || ";
