@@ -46,18 +46,18 @@ def create_submission_files(configs, output_folder):
 
 configs = [
     # Single Lepton Config files
-    "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PP8.cfg",            # Nominal
-    # "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PP8_AFII.cfg",       # AFII Nominal
-    # "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PH7.cfg",            # PH7 PS
-    # "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PP8_ptHard1.cfg",    # PtHard1 Variation
-    # "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_DipolePS.cfg",       # DipolePS Variation
-    # "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PP8_bzd2.cfg"        # Born-zero damp2 AFII sample
-    # "/scratch4/levans/data-driven-reweighting/Configs/FSR_DOWN/1l/config_1l_FSR_DOWN_PP8.cfg",          # Final State Radiation down
-    # "/scratch4/levans/data-driven-reweighting/Configs/FSR_UP/1l/config_1l_FSR_UP_PP8.cfg",              # Final State Radiation up
-    # "/scratch4/levans/data-driven-reweighting/Configs/muR05_muF05/1l/config_1l_muR05_muF05_PP8.cfg",    # Scale variation down
-    # "/scratch4/levans/data-driven-reweighting/Configs/muR20_muF20/1l/config_1l_muR20_muF20_PP8.cfg",    # Scale variation up
-    # "/scratch4/levans/data-driven-reweighting/Configs/var3c_DOWN/1l/config_1l_var3c_DOWN_PP8.cfg",      # Initial State Radiation (alpha_s) down
-    # "/scratch4/levans/data-driven-reweighting/Configs/var3c_UP/1l/config_1l_var3c_UP_PP8.cfg",          # Initial State Radiation (alpha_s) up
+    #"/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PP8.cfg",            # Nominal
+     "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PP8_AFII.cfg",       # AFII Nominal
+     "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PH7.cfg",            # PH7 PS
+     "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PP8_ptHard1.cfg",    # PtHard1 Variation
+     "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_DipolePS.cfg",       # DipolePS Variation
+     "/scratch4/levans/data-driven-reweighting/Configs/Nominal/1l/config_1l_nominal_PP8_bzd2.cfg"        # Born-zero damp2 AFII sample
+     "/scratch4/levans/data-driven-reweighting/Configs/FSR_DOWN/1l/config_1l_FSR_DOWN_PP8.cfg",          # Final State Radiation down
+     "/scratch4/levans/data-driven-reweighting/Configs/FSR_UP/1l/config_1l_FSR_UP_PP8.cfg",              # Final State Radiation up
+     "/scratch4/levans/data-driven-reweighting/Configs/muR05_muF05/1l/config_1l_muR05_muF05_PP8.cfg",    # Scale variation down
+     "/scratch4/levans/data-driven-reweighting/Configs/muR20_muF20/1l/config_1l_muR20_muF20_PP8.cfg",    # Scale variation up
+     "/scratch4/levans/data-driven-reweighting/Configs/var3c_DOWN/1l/config_1l_var3c_DOWN_PP8.cfg",      # Initial State Radiation (alpha_s) down
+     "/scratch4/levans/data-driven-reweighting/Configs/var3c_UP/1l/config_1l_var3c_UP_PP8.cfg",          # Initial State Radiation (alpha_s) up
 ]
 output_folder = "/scratch4/levans/data-driven-reweighting/Condor"
 

@@ -55,6 +55,7 @@ if __name__ == "__main__":
             "ptHard1",
             "DipolePS",
             "bzd2_AFII",
+            "PH7",
         ]
     else:
         variation_list = [args.variation]
