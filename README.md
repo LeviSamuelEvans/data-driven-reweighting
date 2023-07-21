@@ -132,7 +132,6 @@ Some alternatives to this approach would be using Kernal Density Estimation (KDE
 
 Alternartive interpolation functions could also be used, e.g
 
-- Spline Interpolation: Spline interpolation uses piecewise-defined polynomial functions to interpolate between data points. It provides a smooth and flexible interpolation that can capture complex shapes in your data.
 - Radial Basis Functions (RBF): RBF interpolation uses radial basis functions, such as Gaussian functions or inverse multiquadrics, to interpolate data. RBFs can handle irregularly spaced data and provide smooth interpolations.
 - Kriging: Kriging, also known as Gaussian process regression, is a statistical interpolation technique that models the data as a random process. It can capture complex spatial correlations and provide uncertainty estimates for the interpolated values.
 
